@@ -23,7 +23,6 @@
 </head>
 <body class="p-3">
 
-  <!-- Üst Kontrol & Geçmiş Kayıtlar Barı -->
   <div class="container mb-3 no-print">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <a href="https://757-stack.github.io/uretim-recete/" class="btn btn-outline-secondary">← Ana Sistem</a>
@@ -35,7 +34,6 @@
       </div>
     </div>
 
-    <!-- Kayıtlı Rapor Seçimi -->
     <div class="card p-2 bg-light border-0 shadow-sm">
       <div class="row align-items-center">
         <label for="kayitliRaporlar" class="col-sm-3 col-form-label fw-bold text-primary">📋 Kayıtlı Galeri / Raporlar:</label>
@@ -48,7 +46,6 @@
     </div>
   </div>
 
-  <!-- PDF VE YAZDIRILACAK ALAN -->
   <div class="container rapor-kutu" id="yazdirilacakAlan">
     <h2 class="pdf-baslik">ÜRETİM FOTOĞRAFLARI</h2>
 
@@ -65,13 +62,14 @@
         </thead>
         <tbody>
           <tr>
-            <td><input type="text" class="form-control text-center border-0 p-0 fw-bold" id="urunAdi" placeholder="Ürün Adı"></td>
-            <td><input type="date" class="form-control text-center border-0 p-0" id="tarih"></td>
-            <td><input type="text" class="form-control text-center border-0 p-0" id="gram" placeholder="Gram"></td>
-            <td><input type="text" class="form-control text-center border-0 p-0" id="renk" placeholder="Renk"></td>
-            <td><input type="text" class="form-control text-center border-0 p-0" id="makina" placeholder="Makina"></td>
+            <td><input type="text" class="form-control text-center border-0 p-0 fw-bold oto-kayit" id="urunAdi" placeholder="Ürün Adı"></td>
+            <td><input type="date" class="form-control text-center border-0 p-0 oto-kayit" id="tarih"></td>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit" id="gram" placeholder="Gram"></td>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit" id="renk" placeholder="Renk"></td>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit" id="makina" placeholder="Makina"></td>
           </tr>
 
+          <!-- HAMMADDE KARIŞIM ORANLARI -->
           <tr><td colspan="5" class="baslik-satiri">HAMMADDE KARIŞIM ORANLARI (%)</td></tr>
           <tr>
             <th>Hammadde 1 (%)</th>
@@ -80,12 +78,20 @@
             <th colspan="2">Hammadde 4 (%)</th>
           </tr>
           <tr>
-            <td><input type="text" class="form-control text-center border-0 p-0" id="ham1" placeholder="%"></td>
-            <td><input type="text" class="form-control text-center border-0 p-0" id="ham2" placeholder="%"></td>
-            <td><input type="text" class="form-control text-center border-0 p-0" id="ham3" placeholder="%"></td>
-            <td colspan="2"><input type="text" class="form-control text-center border-0 p-0" id="ham4" placeholder="%"></td>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit" id="ham1" placeholder="%"></td>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit" id="ham2" placeholder="%"></td>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit" id="ham3" placeholder="%"></td>
+            <td colspan="2"><input type="text" class="form-control text-center border-0 p-0 oto-kayit" id="ham4" placeholder="%"></td>
+          </tr>
+          <!-- HAMMADDE ÜRÜN KODU / ADI -->
+          <tr>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit text-secondary fst-italic" id="ham1_kod" placeholder="Ürün Kodu/Adı"></td>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit text-secondary fst-italic" id="ham2_kod" placeholder="Ürün Kodu/Adı"></td>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit text-secondary fst-italic" id="ham3_kod" placeholder="Ürün Kodu/Adı"></td>
+            <td colspan="2"><input type="text" class="form-control text-center border-0 p-0 oto-kayit text-secondary fst-italic" id="ham4_kod" placeholder="Ürün Kodu/Adı"></td>
           </tr>
 
+          <!-- İLAÇ KARIŞIM ORANLARI -->
           <tr><td colspan="5" class="baslik-satiri">İLAÇ KARIŞIM ORANLARI (%)</td></tr>
           <tr>
             <th>İlaç 1 (%)</th>
@@ -94,16 +100,22 @@
             <th colspan="2">İlaç 4 (%)</th>
           </tr>
           <tr>
-            <td><input type="text" class="form-control text-center border-0 p-0" id="ilac1" placeholder="%"></td>
-            <td><input type="text" class="form-control text-center border-0 p-0" id="ilac2" placeholder="%"></td>
-            <td><input type="text" class="form-control text-center border-0 p-0" id="ilac3" placeholder="%"></td>
-            <td colspan="2"><input type="text" class="form-control text-center border-0 p-0" id="ilac4" placeholder="%"></td>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit" id="ilac1" placeholder="%"></td>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit" id="ilac2" placeholder="%"></td>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit" id="ilac3" placeholder="%"></td>
+            <td colspan="2"><input type="text" class="form-control text-center border-0 p-0 oto-kayit" id="ilac4" placeholder="%"></td>
+          </tr>
+          <!-- İLAÇ ÜRÜN KODU / ADI -->
+          <tr>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit text-secondary fst-italic" id="ilac1_kod" placeholder="Ürün Kodu/Adı"></td>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit text-secondary fst-italic" id="ilac2_kod" placeholder="Ürün Kodu/Adı"></td>
+            <td><input type="text" class="form-control text-center border-0 p-0 oto-kayit text-secondary fst-italic" id="ilac3_kod" placeholder="Ürün Kodu/Adı"></td>
+            <td colspan="2"><input type="text" class="form-control text-center border-0 p-0 oto-kayit text-secondary fst-italic" id="ilac4_kod" placeholder="Ürün Kodu/Adı"></td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Fotoğraf Ekleme Alanı -->
     <div class="card border-2 border-dashed border-primary p-3 text-center mb-4 no-print bg-light">
       <h6 class="fw-bold text-primary mb-1">📷 Fotoğraf Ekle (En fazla 10 Adet)</h6>
       <input type="file" id="fotoYukleInput" multiple accept="image/*" class="d-none" onchange="fotograflariIsle(this)">
@@ -113,23 +125,41 @@
       </div>
     </div>
 
-    <!-- Yüklenen Fotoğraflar -->
     <div id="fotoGaleriAlani" class="foto-liste"></div>
   </div>
 
   <script>
-    // SUPABASE CONFIG (Kendi Supabase bilgilerinizi yazın)
+    // SUPABASE CONFIG (ÖNEMLİ: Kendi Supabase Dashboard bilgilerinizi giriniz)
     const SUPABASE_URL = "https://ihsetoxxggiaeulpqhzg.supabase.co";
     const SUPABASE_KEY = "sb_publishable_HoqAcz7S0ANBNyQTj6fjew_YCa_71nb"; 
 
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    const _supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
     document.getElementById('tarih').valueAsDate = new Date();
     let secilenDosyalar = [];
     let mevcutFotoUrlListesi = [];
 
-    window.onload = function() { kayitliRaporlariListele(); };
+    window.onload = function() { 
+      otomatikYukle();
+      if (_supabase) kayitliRaporlariListele(); 
+    };
 
+    // OTOMATİK LOKAL KAYIT
+    document.querySelectorAll('.oto-kayit').forEach(element => {
+      element.addEventListener('input', function() {
+        localStorage.setItem('galeri_form_' + this.id, this.value);
+      });
+    });
+
+    function otomatikYukle() {
+      document.querySelectorAll('.oto-kayit').forEach(element => {
+        const kayitli = localStorage.getItem('galeri_form_' + element.id);
+        if (kayitli) element.value = kayitli;
+      });
+    }
+
+    // FOTOĞRAF İŞLEMLERİ
     function fotograflariIsle(input) {
       const files = Array.from(input.files);
       if (secilenDosyalar.length + mevcutFotoUrlListesi.length + files.length > 10) {
@@ -139,13 +169,15 @@
       files.forEach(file => {
         secilenDosyalar.push(file);
         const reader = new FileReader();
-        reader.onload = function(e) { galeriyiEkranaCiz(e.target.result); };
+        reader.onload = function(e) { 
+          galeriyiEkranaCiz(e.target.result, secilenDosyalar.length - 1); 
+        };
         reader.readAsDataURL(file);
       });
       input.value = "";
     }
 
-    function galeriyiEkranaCiz(url) {
+    function galeriyiEkranaCiz(url, dosyaIndex = null) {
       const alan = document.getElementById('fotoGaleriAlani');
       const count = secilenDosyalar.length + mevcutFotoUrlListesi.length;
       document.getElementById('fotoSayac').innerText = `(${count} / 10)`;
@@ -153,13 +185,27 @@
       const div = document.createElement('div');
       div.className = "foto-kart";
       div.innerHTML = `
-        <button class="btn btn-sm btn-danger foto-sil-btn no-print" onclick="this.parentElement.remove()">❌ Sil</button>
+        <button class="btn btn-sm btn-danger foto-sil-btn no-print" onclick="fotoSil(this, ${dosyaIndex})">❌ Sil</button>
         <img src="${url}">
       `;
       alan.appendChild(div);
     }
 
+    function fotoSil(btn, dosyaIndex) {
+      if (dosyaIndex !== null && dosyaIndex !== undefined) {
+        secilenDosyalar.splice(dosyaIndex, 1);
+      }
+      btn.parentElement.remove();
+      const count = secilenDosyalar.length + mevcutFotoUrlListesi.length;
+      document.getElementById('fotoSayac').innerText = `(${count} / 10)`;
+    }
+
     async function veriyiKaydet() {
+      if (!_supabase || SUPABASE_URL === 'YOUR_SUPABASE_URL') {
+        alert("Lütfen koddaki SUPABASE_URL ve SUPABASE_KEY alanlarına kendi bilgilerinizi girin!");
+        return;
+      }
+
       const btn = document.getElementById('btnKaydet');
       btn.innerText = "⏳ Kaydediliyor...";
       btn.disabled = true;
@@ -169,9 +215,9 @@
         for (let i = 0; i < secilenDosyalar.length; i++) {
           const file = secilenDosyalar[i];
           const fileName = `${Date.now()}_${i}.jpg`;
-          const { data, error } = await supabase.storage.from('galeri-fotolar').upload(fileName, file);
+          const { data, error } = await _supabase.storage.from('galeri-fotolar').upload(fileName, file);
           if (!error) {
-            const { data: urlData } = supabase.storage.from('galeri-fotolar').getPublicUrl(fileName);
+            const { data: urlData } = _supabase.storage.from('galeri-fotolar').getPublicUrl(fileName);
             yuklenenUrller.push(urlData.publicUrl);
           }
         }
@@ -184,12 +230,16 @@
           makina: document.getElementById('makina').value,
           ham1: document.getElementById('ham1').value, ham2: document.getElementById('ham2').value,
           ham3: document.getElementById('ham3').value, ham4: document.getElementById('ham4').value,
+          ham1_kod: document.getElementById('ham1_kod').value, ham2_kod: document.getElementById('ham2_kod').value,
+          ham3_kod: document.getElementById('ham3_kod').value, ham4_kod: document.getElementById('ham4_kod').value,
           ilac1: document.getElementById('ilac1').value, ilac2: document.getElementById('ilac2').value,
           ilac3: document.getElementById('ilac3').value, ilac4: document.getElementById('ilac4').value,
+          ilac1_kod: document.getElementById('ilac1_kod').value, ilac2_kod: document.getElementById('ilac2_kod').value,
+          ilac3_kod: document.getElementById('ilac3_kod').value, ilac4_kod: document.getElementById('ilac4_kod').value,
           foto_listesi: yuklenenUrller
         };
 
-        const { error: dbError } = await supabase.from('uretim_fotogaleri').insert([payload]);
+        const { error: dbError } = await _supabase.from('uretim_fotogaleri').insert([payload]);
         if (dbError) throw dbError;
 
         alert("Rapor ve fotoğraflar başarıyla kaydedildi!");
@@ -205,7 +255,7 @@
     async function kayitliRaporlariListele() {
       const select = document.getElementById('kayitliRaporlar');
       select.innerHTML = '<option value="">-- Geçmiş Bir Rapor Seçin --</option>';
-      const { data } = await supabase.from('uretim_fotogaleri').select('*').order('id', { ascending: false });
+      const { data } = await _supabase.from('uretim_fotogaleri').select('*').order('id', { ascending: false });
       if (data) {
         data.forEach(item => {
           const opt = document.createElement('option');
@@ -227,14 +277,24 @@
       document.getElementById('gram').value = rapor.gram || '';
       document.getElementById('renk').value = rapor.renk || '';
       document.getElementById('makina').value = rapor.makina || '';
+      
       document.getElementById('ham1').value = rapor.ham1 || '';
       document.getElementById('ham2').value = rapor.ham2 || '';
       document.getElementById('ham3').value = rapor.ham3 || '';
       document.getElementById('ham4').value = rapor.ham4 || '';
+      document.getElementById('ham1_kod').value = rapor.ham1_kod || '';
+      document.getElementById('ham2_kod').value = rapor.ham2_kod || '';
+      document.getElementById('ham3_kod').value = rapor.ham3_kod || '';
+      document.getElementById('ham4_kod').value = rapor.ham4_kod || '';
+
       document.getElementById('ilac1').value = rapor.ilac1 || '';
       document.getElementById('ilac2').value = rapor.ilac2 || '';
       document.getElementById('ilac3').value = rapor.ilac3 || '';
       document.getElementById('ilac4').value = rapor.ilac4 || '';
+      document.getElementById('ilac1_kod').value = rapor.ilac1_kod || '';
+      document.getElementById('ilac2_kod').value = rapor.ilac2_kod || '';
+      document.getElementById('ilac3_kod').value = rapor.ilac3_kod || '';
+      document.getElementById('ilac4_kod').value = rapor.ilac4_kod || '';
 
       const alan = document.getElementById('fotoGaleriAlani');
       alan.innerHTML = "";
