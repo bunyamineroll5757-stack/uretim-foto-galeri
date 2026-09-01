@@ -99,27 +99,23 @@
     .foto-liste { display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
     .foto-kart { 
       width: 100%; 
-      min-height: 250px;
-      max-height: 95vh;
-      box-sizing: border-box;
-      text-align: center; 
-      position: relative; 
       page-break-before: always; 
       page-break-inside: avoid;
       break-inside: avoid;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      text-align: center; 
+      position: relative; 
       background: #ffffff;
-      padding: 5px;
+      padding: 10px;
       border: 1px solid #e2e8f0;
       border-radius: 6px;
+      margin-bottom: 10px;
     }
     .foto-kart img { 
       max-width: 100%; 
-      max-height: 90vh; 
+      height: auto; 
+      max-height: 75vh; 
       object-fit: contain; 
-      display: block;
+      display: inline-block;
       margin: 0 auto;
     }
     .foto-sil-btn { position: absolute; top: 10px; right: 10px; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
@@ -130,7 +126,7 @@
       .no-print, .foto-sil-btn { display: none !important; } 
       body { background-color: #fff; padding: 0; } 
       .rapor-kutu { box-shadow: none; padding: 0 !important; border: none; } 
-      .foto-kart { page-break-before: always; page-break-inside: avoid; border: none; height: 100vh; }
+      .foto-kart { page-break-before: always; page-break-inside: avoid; border: none; }
     }
   </style>
 </head>
@@ -194,7 +190,7 @@
         <div class="pdf-baslik">ÜRETİM AYARLARI FOTOĞRAFLARI</div>
 
         <div class="table-responsive">
-          <!-- ÜST TABLO: Müşteri Adı ve Tarih (2 Eşit Alan) -->
+          <!-- ÜST TABLO: Müşteri Adı, Tarih ve Hat Hızı -->
           <table class="table uretim-tablo">
             <thead>
               <tr>
