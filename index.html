@@ -194,21 +194,34 @@
         <div class="pdf-baslik">ÜRETİM AYARLARI FOTOĞRAFLARI</div>
 
         <div class="table-responsive">
+          <!-- ÜST TABLO: Müşteri Adı ve Tarih (2 Eşit Alan) -->
           <table class="table uretim-tablo">
             <thead>
               <tr>
-                <th style="width: 27%;">Müşteri Adı</th>
-                <th style="width: 27%;">Ürün Adı</th>
-                <th style="width: 22%;">Tarih</th>
-                <th style="width: 12%;">Gram</th>
-                <th style="width: 12%;">Renk</th>
+                <th style="width: 50%;">Müşteri Adı</th>
+                <th style="width: 50%;">Tarih</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><input type="text" id="musteriAdi" placeholder="Müşteri"></td>
-                <td><input type="text" id="urunAdi" placeholder="Ürün"></td>
+                <td><input type="text" id="musteriAdi" placeholder="Müşteri Adı"></td>
                 <td><input type="date" id="tarih"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- ALT TABLO: Ürün Adı, Gram, Renk (3 Eşit Alan) -->
+          <table class="table uretim-tablo">
+            <thead>
+              <tr>
+                <th style="width: 33.33%;">Ürün Adı</th>
+                <th style="width: 33.33%;">Gram</th>
+                <th style="width: 33.33%;">Renk</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text" id="urunAdi" placeholder="Ürün Adı"></td>
                 <td><input type="text" id="gram" placeholder="Gram"></td>
                 <td><input type="text" id="renk" placeholder="Renk"></td>
               </tr>
@@ -625,7 +638,7 @@
 
     async function pdfPaylas() {
       const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
-      element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
+      element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => ist.remove());
       const opt = {
         margin: 5,
         image: { type: 'jpeg', quality: 0.98 },
