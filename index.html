@@ -99,23 +99,25 @@
     .foto-liste { display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
     .foto-kart { 
       width: 100%; 
-      page-break-inside: avoid;
-      break-inside: avoid;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
       text-align: center; 
       position: relative; 
       background: #ffffff;
       padding: 5px;
       border: 1px solid #e2e8f0;
       border-radius: 6px;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
     .foto-kart img { 
       width: 100%;
       height: auto;
-      max-height: 230mm;
+      max-height: 180mm;
       object-fit: contain;
       display: block;
       margin: 0 auto;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
     }
     .foto-sil-btn { position: absolute; top: 10px; right: 10px; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
     .liste-kart { background: #fff; border-radius: 8px; padding: 10px; margin-bottom: 8px; border-left: 5px solid var(--accent-color); box-shadow: 0 2px 6px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; }
@@ -125,7 +127,7 @@
       .no-print, .foto-sil-btn { display: none !important; } 
       body { background-color: #fff; padding: 0; } 
       .rapor-kutu { box-shadow: none; padding: 0 !important; border: none; } 
-      .foto-kart { page-break-inside: avoid; border: none; }
+      .foto-kart { page-break-inside: avoid !important; break-inside: avoid !important; border: none; }
     }
   </style>
 </head>
@@ -629,8 +631,8 @@
         margin: 5,
         filename: 'uretim_proses_raporu.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', putOnlyUsedFonts: true }
       };
       html2pdf().set(opt).from(element).save();
     }
@@ -641,8 +643,8 @@
       const opt = {
         margin: 5,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', putOnlyUsedFonts: true }
       };
       const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
       const dosya = new File([pdfBlob], 'uretim_proses_raporu.pdf', { type: 'application/pdf' });
@@ -655,4 +657,3 @@
   </script>
 </body>
 </html>
-w
