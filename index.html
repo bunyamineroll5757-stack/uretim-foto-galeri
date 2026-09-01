@@ -170,7 +170,6 @@
         </div>
       </div>
 
-      <!-- AKORDEON SEKME (REÇETE / RAPOR ARAMA) -->
       <div class="accordion mb-2 shadow-sm" id="accordionRaporlar">
         <div class="accordion-item border-0" style="border-radius: 8px; overflow: hidden;">
           <h2 class="accordion-header" id="headingRaporlar">
@@ -219,7 +218,6 @@
             </tbody>
           </table>
 
-          <!-- KESİM DETAY ALANI -->
           <table class="table uretim-tablo">
             <tbody>
               <tr><td colspan="4" class="baslik-satiri">⚙️ KESİM DETAY</td></tr>
@@ -290,11 +288,11 @@
       </div>
 
       <div class="card border-2 border-dashed border-primary p-2 text-center mb-2 no-print bg-light" style="border-radius: 8px;">
-        <h6 class="fw-bold text-primary mb-1 small">📷 Fotoğraf Ekle (En fazla 10 Adet)</h6>
+        <h6 class="fw-bold text-primary mb-1 small">📷 Fotoğraf Ekle (En fazla 15 Adet)</h6>
         <input type="file" id="fotoYukleInput" multiple accept="image/*" class="d-none" onchange="fotograflariIsle(this)">
         <div>
           <label for="fotoYukleInput" class="btn btn-primary btn-sm px-3 py-1 fw-bold shadow-sm" style="background-color: var(--accent-color);">Fotoğraf Seç</label>
-          <span class="ms-2 fw-bold text-secondary small" id="fotoSayac">(0 / 10)</span>
+          <span class="ms-2 fw-bold text-secondary small" id="fotoSayac">(0 / 15)</span>
         </div>
       </div>
 
@@ -397,8 +395,8 @@
 
     function fotograflariIsle(input) {
       const files = Array.from(input.files);
-      if (tumFotoBase64Listesi.length + files.length > 10) {
-        alert("En fazla 10 adet fotoğraf ekleyebilirsiniz!");
+      if (tumFotoBase64Listesi.length + files.length > 15) {
+        alert("En fazla 15 adet fotoğraf ekleyebilirsiniz!");
         return;
       }
       files.forEach(file => {
@@ -412,7 +410,7 @@
 
     function galeriyiEkranaCiz(src, index) {
       const alan = document.getElementById('fotoGaleriAlani');
-      document.getElementById('fotoSayac').innerText = `(${tumFotoBase64Listesi.length} / 10)`;
+      document.getElementById('fotoSayac').innerText = `(${tumFotoBase64Listesi.length} / 15)`;
 
       const div = document.createElement('div');
       div.className = "foto-kart";
@@ -428,7 +426,7 @@
       const alan = document.getElementById('fotoGaleriAlani');
       alan.innerHTML = "";
       tumFotoBase64Listesi.forEach((src, i) => galeriyiEkranaCiz(src, i));
-      document.getElementById('fotoSayac').innerText = `(${tumFotoBase64Listesi.length} / 10)`;
+      document.getElementById('fotoSayac').innerText = `(${tumFotoBase64Listesi.length} / 15)`;
     }
 
     async function veriyiKaydet() {
@@ -612,7 +610,7 @@
       document.getElementById('tarih').valueAsDate = new Date();
       document.getElementById('fotoGaleriAlani').innerHTML = "";
       tumFotoBase64Listesi = [];
-      document.getElementById('fotoSayac').innerText = "(0 / 10)";
+      document.getElementById('fotoSayac').innerText = "(0 / 15)";
     }
 
     function pdfIndir() {
