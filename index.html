@@ -199,13 +199,15 @@
             <thead>
               <tr>
                 <th style="width: 50%;">Müşteri Adı</th>
-                <th style="width: 50%;">Tarih</th>
+                <th style="width: 33%;">Tarih</th>
+                <th style="width: 17%;">Hat Hızı</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td><input type="text" id="musteriAdi" placeholder="Müşteri Adı"></td>
                 <td><input type="date" id="tarih"></td>
+                <td><input type="text" id="hatHizi" placeholder="Hız"></td>
               </tr>
             </tbody>
           </table>
@@ -453,6 +455,7 @@
         musteri_adi: document.getElementById('musteriAdi').value,
         urun_adi: document.getElementById('urunAdi').value,
         tarih: document.getElementById('tarih').value,
+        hat_hizi: document.getElementById('hatHizi').value,
         gram: document.getElementById('gram').value,
         renk: document.getElementById('renk').value,
         kesim_eni: document.getElementById('kesimEni').value,
@@ -521,7 +524,7 @@
           <div class="liste-kart d-flex justify-content-between align-items-center py-2 px-2 my-1">
             <div>
               <div class="fw-bold text-dark small">${item.musteri_adi ? item.musteri_adi + ' - ' : ''}${item.urun_adi || 'Başlıksız Ürün'}</div>
-              <div class="small text-muted" style="font-size:10px;">📅 ${item.tarih || '-'}</div>
+              <div class="small text-muted" style="font-size:10px;">📅 ${item.tarih || '-'} ${item.hat_hizi ? '| ⚡ ' + item.hat_hizi : ''}</div>
             </div>
             <div>
               <button onclick="raporDetayGoster(${item.id})" class="btn btn-sm btn-info text-white p-1 fw-bold">👁️</button>
@@ -554,6 +557,7 @@
       document.getElementById('musteriAdi').value = rapor.musteri_adi || '';
       document.getElementById('urunAdi').value = rapor.urun_adi || '';
       document.getElementById('tarih').value = rapor.tarih || '';
+      document.getElementById('hatHizi').value = rapor.hat_hizi || '';
       document.getElementById('gram').value = rapor.gram || '';
       document.getElementById('renk').value = rapor.renk || '';
       
@@ -638,7 +642,7 @@
 
     async function pdfPaylas() {
       const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
-      element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => ist.remove());
+      element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
       const opt = {
         margin: 5,
         image: { type: 'jpeg', quality: 0.98 },
