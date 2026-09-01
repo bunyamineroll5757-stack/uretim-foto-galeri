@@ -99,29 +99,27 @@
     .foto-liste { 
       display: flex; 
       flex-direction: column; 
-      gap: 20px; 
+      gap: 15px; 
       margin-top: 15px; 
       width: 100%; 
     }
     .foto-kart { 
       width: 100% !important; 
       max-width: 100% !important;
-      margin: 0 auto;
+      margin: 0 auto 10px auto;
       text-align: center; 
       position: relative; 
       background: #ffffff;
-      padding: 10px;
+      padding: 5px;
       border: 1px solid #e2e8f0;
       border-radius: 6px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      break-inside: avoid !important;
       page-break-inside: avoid !important;
+      break-inside: avoid !important;
     }
     .foto-kart img { 
-      width: 100% !important;
-      max-height: 350px !important;
+      max-width: 100% !important;
+      max-height: 110mm !important;
+      width: auto !important;
       height: auto !important;
       object-fit: contain !important;
       display: block;
@@ -137,13 +135,9 @@
       body { background-color: #fff; padding: 0; } 
       .rapor-kutu { box-shadow: none; padding: 0 !important; border: none; } 
       .foto-kart {
-        max-height: 180mm !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
-      }
-      .foto-kart img {
-        max-height: 170mm !important;
-        object-fit: contain !important;
+        max-height: 120mm !important;
       }
     }
   </style>
@@ -643,15 +637,15 @@
       return {
         margin: [5, 5, 5, 5],
         filename: 'uretim_proses_raporu.pdf',
-        image: { type: 'jpeg', quality: 0.95 },
+        image: { type: 'jpeg', quality: 0.92 },
         html2canvas: { 
           scale: 2, 
           useCORS: true, 
           letterRendering: true,
           scrollY: 0 
         },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', putOnlyUsedFonts: true },
-        pagebreak: { mode: ['css', 'legacy'], avoid: ['.foto-kart', 'tr', 'table'] }
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['css', 'legacy'], avoid: ['.foto-kart', 'tr', 'table', '.uretim-tablo'] }
       };
     }
 
@@ -679,3 +673,4 @@
   </script>
 </body>
 </html>
+a
