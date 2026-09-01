@@ -96,7 +96,7 @@
       font-size: 12px !important; 
     }
 
-    /* Fırın Isı için özel içten sabit °C tasarımı */
+    /* Fırın Isı için sağa sabitlenen °C tasarımı */
     .firin-isi-wrapper {
       position: relative;
       display: flex;
@@ -105,7 +105,7 @@
     }
     .firin-isi-sabit {
       position: absolute;
-      left: 6px;
+      right: 6px;
       font-size: 11px;
       font-weight: 700;
       color: #64748b;
@@ -113,7 +113,7 @@
       z-index: 5;
     }
     .firin-isi-input {
-      padding-left: 28px !important;
+      padding-right: 28px !important;
       text-align: left !important;
     }
     
@@ -281,8 +281,8 @@
                 <td><input type="text" id="cap" placeholder="Rulo çap verisi..."></td>
                 <td>
                   <div class="firin-isi-wrapper">
-                    <span class="firin-isi-sabit">°C</span>
                     <input type="text" id="firinIsi" class="firin-isi-input" placeholder="Isı...">
+                    <span class="firin-isi-sabit">°C</span>
                   </div>
                 </td>
               </tr>
