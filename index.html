@@ -96,8 +96,8 @@
       font-size: 12px !important; 
     }
 
-    /* Fırın Isı için °C birleşik görünüm alanı */
-    .firin-isi-container {
+    /* Birimli (CM, MT, °C) giriş alanları için ortak esnek yapı */
+    .suffix-container {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -107,12 +107,12 @@
       padding: 2px 4px;
       width: 100%;
     }
-    .firin-isi-container:focus-within {
+    .suffix-container:focus-within {
       background-color: #ffffff;
       border-color: var(--accent-color);
       box-shadow: 0 0 4px rgba(37, 99, 235, 0.4);
     }
-    .firin-isi-input {
+    .suffix-input {
       border: none !important;
       background: transparent !important;
       text-align: right !important;
@@ -120,16 +120,16 @@
       margin: 0 !important;
       box-shadow: none !important;
       width: auto !important;
-      max-width: 75% !important;
+      max-width: 70% !important;
       font-size: 12px !important;
       font-weight: 600;
       color: #0f172a !important;
     }
-    .firin-isi-suffix {
+    .suffix-text {
       font-size: 11px;
       font-weight: 700;
       color: #64748b;
-      margin-left: 2px;
+      margin-left: 3px;
       user-select: none;
     }
     
@@ -292,13 +292,28 @@
                 <th style="width: 25%;">4. FIRIN ISI</th>
               </tr>
               <tr>
-                <td><input type="text" id="kesimEni" placeholder="Kesim eni..."></td>
-                <td><input type="text" id="sarim" placeholder="Sarım ayarları..."></td>
-                <td><input type="text" id="cap" placeholder="Rulo çap verisi..."></td>
                 <td>
-                  <div class="firin-isi-container">
-                    <input type="text" id="firinIsi" class="firin-isi-input" placeholder="Isı...">
-                    <span class="firin-isi-suffix">°C</span>
+                  <div class="suffix-container">
+                    <input type="text" id="kesimEni" class="suffix-input" placeholder="En...">
+                    <span class="suffix-text">CM</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="suffix-container">
+                    <input type="text" id="sarim" class="suffix-input" placeholder="Sarım...">
+                    <span class="suffix-text">MT</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="suffix-container">
+                    <input type="text" id="cap" class="suffix-input" placeholder="Çap...">
+                    <span class="suffix-text">CM</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="suffix-container">
+                    <input type="text" id="firinIsi" class="suffix-input" placeholder="Isı...">
+                    <span class="suffix-text">°C</span>
                   </div>
                 </td>
               </tr>
