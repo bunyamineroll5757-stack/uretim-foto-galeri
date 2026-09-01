@@ -2,39 +2,118 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Üretim Raporu</title>
-  <!-- html2pdf.js Kütüphanesi -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Üretim Proses Raporlama ve Fotoğraf Galerisi</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.2;
-      color: #333;
-      margin: 0;
-      padding: 10px;
-      background-color: #fff;
+    :root {
+      --primary-color: #0f172a;
+      --accent-color: #2563eb;
+      --bg-color: #f1f5f9;
+      --card-bg: #ffffff;
+      --header-bg: #1e293b;
+      --border-color: #cbd5e1;
     }
-    .rapor-container {
+
+    body { background-color: var(--bg-color); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 0 !important; margin: 0 !important; color: #334155; }
+    
+    #loginEkran {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
+    .login-kutu {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
       width: 100%;
-      max-width: 800px;
-      margin: 0 auto;
-      background: #fff;
+      max-width: 380px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
+
+    .main-wrapper { max-width: 100%; padding: 4px; margin: 0 auto; display: none; }
+    .rapor-kutu { 
+      background: var(--card-bg); 
+      padding: 8px !important; 
+      border-radius: 6px; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+      width: 100% !important; 
+      margin: 0 !important; 
+      border: 1px solid #e2e8f0;
+    }
+    
+    .pdf-baslik { 
+      text-align: center; 
+      font-weight: 800; 
+      color: #ffffff; 
+      background: linear-gradient(90deg, #1e293b 0%, #334155 100%);
+      padding: 10px; 
+      border-radius: 6px;
+      margin-bottom: 10px; 
+      font-size: 16px; 
+      letter-spacing: 1px;
+      text-transform: uppercase; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .table-responsive { overflow-x: visible !important; }
+    .uretim-tablo { table-layout: fixed; width: 100% !important; margin-bottom: 8px !important; border-collapse: separate; border-spacing: 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); }
+    
+    .uretim-tablo th { background-color: var(--header-bg); color: #ffffff; font-weight: 700; font-size: 11px; text-align: center; padding: 6px 3px !important; word-wrap: break-word; border: 1px solid #334155; }
+    .uretim-tablo td { font-size: 12px; text-align: center; vertical-align: middle; padding: 3px !important; background-color: #fff; border: 1px solid #e2e8f0; }
+    
+    .uretim-tablo input, .uretim-tablo textarea { 
+      font-size: 12px !important; 
+      width: 100% !important; 
+      text-align: center; 
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 4px;
+      padding: 4px 2px !important;
+      color: #0f172a !important;
+      font-weight: 600;
+    }
+    .uretim-tablo input:focus, .uretim-tablo textarea:focus {
+      background-color: #ffffff !important;
+      border-color: var(--accent-color) !important;
+      outline: none;
+      box-shadow: 0 0 4px rgba(37, 99, 235, 0.4);
+    }
+    
+    .baslik-satiri { 
+      background: linear-gradient(90deg, #0f172a 0%, #2563eb 100%) !important; 
+      color: #ffffff !important;
+      font-weight: 700; 
+      text-align: left !important; 
+      padding-left: 8px !important; 
+      font-size: 12px !important; 
+    }
+    
+    .foto-liste { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
     .foto-kart { 
       width: 100%; 
       max-width: 100%;
       page-break-inside: avoid !important;
       break-inside: avoid !important;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       text-align: center; 
       position: relative; 
       background: #ffffff;
       padding: 5px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
     }
     .foto-kart img { 
       max-width: 100% !important;
       width: auto !important;
-      max-height: 110mm !important;
+      max-height: 100mm !important;
       height: auto !important;
       object-fit: contain;
       display: inline-block;
@@ -42,48 +121,509 @@
       page-break-inside: avoid !important;
       break-inside: avoid !important;
     }
-    .buton-grup {
-      text-align: center;
-      margin: 20px 0;
-    }
-    .btn {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      margin: 0 5px;
-    }
-    .btn:hover {
-      background-color: #0056b3;
-    }
-    @media print {
-      .buton-grup {
-        display: none;
-      }
+    .foto-sil-btn { position: absolute; top: 8px; right: 8px; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+    .liste-kart { background: #fff; border-radius: 8px; padding: 8px; margin-bottom: 6px; border-left: 5px solid var(--accent-color); box-shadow: 0 2px 6px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; }
+    .notlar-alani { border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px; width: 100%; font-size: 12px; background-color: #f8fafc; color: #0f172a; resize: vertical; }
+
+    @media print { 
+      .no-print, .foto-sil-btn { display: none !important; } 
+      body { background-color: #fff; padding: 0; } 
+      .rapor-kutu { box-shadow: none; padding: 0 !important; border: none; } 
+      .foto-kart { page-break-inside: avoid !important; break-inside: avoid !important; border: none; }
     }
   </style>
 </head>
 <body>
 
-  <div class="buton-grup">
-    <button class="btn" onclick="pdfIndir()">PDF İndir</button>
-    <button class="btn" onclick="pdfPaylas()">PDF Paylaş</button>
+  <div id="loginEkran">
+    <div class="login-kutu text-center">
+      <div class="mb-3"><span style="font-size: 36px;">⚙️</span></div>
+      <h5 class="fw-bold text-dark mb-1">Üretim Portalına Giriş</h5>
+      <p class="text-muted small mb-4">Lütfen kullanıcı bilgilerinizi giriniz</p>
+      <form onsubmit="girisYap(event)">
+        <div class="mb-3 text-start">
+          <label class="form-label small fw-bold text-secondary">Kullanıcı Adı</label>
+          <input type="text" id="loginKullanici" class="form-control" required placeholder="Kullanıcı adı">
+        </div>
+        <div class="mb-3 text-start">
+          <label class="form-label small fw-bold text-secondary">Şifre</label>
+          <input type="password" id="loginSifre" class="form-control" required placeholder="Şifre">
+        </div>
+        <div id="loginHata" class="text-danger small mb-3 d-none fw-bold">⚠️ Hatalı kullanıcı adı veya şifre!</div>
+        <button type="submit" class="btn btn-primary w-100 fw-bold py-2 shadow-sm" style="background-color: var(--accent-color);">Giriş Yap</button>
+      </form>
+    </div>
   </div>
 
-  <div id="pdf-icerik" class="rapor-container">
-    <!-- Örnek Fotoğraf Kartları -->
-    <div class="foto-kart">
-      <img src="34453.jpg" alt="Üretim Ekranı 1">
+  <div class="main-wrapper" id="anaUygulama">
+    <div class="container-fluid mb-2 no-print px-1">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <a href="./index.html" class="btn btn-outline-dark btn-sm px-2 fw-bold">← Ana Sistem</a>
+        <div>
+          <button onclick="formuTemizle()" class="btn btn-outline-primary btn-sm me-1 fw-bold">➕ Yeni</button>
+          <button onclick="veriyiKaydet()" class="btn btn-success btn-sm me-1 fw-bold" id="btnKaydet">💾 Kaydet</button>
+          <button onclick="cikisYap()" class="btn btn-outline-danger btn-sm px-2 fw-bold">🚪 Çıkış</button>
+        </div>
+      </div>
+
+      <div class="accordion mb-2 shadow-sm" id="accordionRaporlar">
+        <div class="accordion-item border-0" style="border-radius: 8px; overflow: hidden;">
+          <h2 class="accordion-header" id="headingRaporlar">
+            <button class="accordion-button collapsed py-2 px-3 fw-bold bg-white text-dark shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRaporlar" aria-expanded="false" aria-controls="collapseRaporlar" style="font-size: 12px;">
+              📋 Kayıtlı Galeri Raporları & Arama
+            </button>
+          </h2>
+          <div id="collapseRaporlar" class="accordion-collapse collapse" aria-labelledby="headingRaporlar" data-bs-parent="#accordionRaporlar">
+            <div class="accordion-body bg-light p-2">
+              <div class="input-group input-group-sm mb-2">
+                <span class="input-group-text bg-white">🔍</span>
+                <input type="text" id="aramaKutusu" class="form-control form-control-sm" placeholder="Müşteri veya ürün adı ile reçete ara..." oninput="raporlariFiltrele(this.value)">
+              </div>
+              <div id="raporListesiAlani" class="row g-2" style="max-height: 220px; overflow-y: auto;">
+                <div class="text-secondary small text-center">Raporlar yükleniyor...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="foto-kart">
-      <img src="34455.jpg" alt="Üretim Ekranı 2">
+
+    <div class="rapor-kutu" id="yazdirilacakAlan">
+      <div>
+        <div class="pdf-baslik">ÜRETİM AYARLARI VE FOTOĞRAF RAPORU</div>
+
+        <div class="table-responsive">
+          <table class="table uretim-tablo">
+            <thead>
+              <tr>
+                <th style="width: 50%;">Müşteri Adı</th>
+                <th style="width: 33%;">Tarih</th>
+                <th style="width: 17%;">Hat Hızı</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text" id="musteriAdi" placeholder="Müşteri Adı"></td>
+                <td><input type="date" id="tarih"></td>
+                <td><input type="text" id="hatHizi" placeholder="Hız"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table uretim-tablo">
+            <thead>
+              <tr>
+                <th style="width: 33.33%;">Ürün Adı</th>
+                <th style="width: 33.33%;">Gram</th>
+                <th style="width: 33.33%;">Renk</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text" id="urunAdi" placeholder="Ürün Adı"></td>
+                <td><input type="text" id="gram" placeholder="Gram"></td>
+                <td><input type="text" id="renk" placeholder="Renk"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table uretim-tablo">
+            <tbody>
+              <tr><td colspan="4" class="baslik-satiri">⚙️ KESİM DETAY</td></tr>
+              <tr>
+                <th style="width: 25%;">1. KESİM ENİ</th>
+                <th style="width: 25%;">2. SARIM</th>
+                <th style="width: 25%;">3. ÇAP</th>
+                <th style="width: 25%;">4. FIRIN ISI</th>
+              </tr>
+              <tr>
+                <td><input type="text" id="kesimEni" placeholder="Kesim eni..."></td>
+                <td><input type="text" id="sarim" placeholder="Sarım ayarları..."></td>
+                <td><input type="text" id="cap" placeholder="Rulo çap verisi..."></td>
+                <td><input type="text" id="firinIsi" placeholder="Fırın ısısı..."></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table uretim-tablo">
+            <tbody>
+              <tr><td colspan="4" class="baslik-satiri">🧪 HAMMADDE KARIŞIM ORANLARI (%)</td></tr>
+              <tr>
+                <th style="width: 25%;">Ham 1 (%)</th>
+                <th style="width: 25%;">Ham 2 (%)</th>
+                <th style="width: 25%;">Ham 3 (%)</th>
+                <th style="width: 25%;">Ham 4 (%)</th>
+              </tr>
+              <tr>
+                <td><input type="text" id="ham1" placeholder="%"></td>
+                <td><input type="text" id="ham2" placeholder="%"></td>
+                <td><input type="text" id="ham3" placeholder="%"></td>
+                <td><input type="text" id="ham4" placeholder="%"></td>
+              </tr>
+              <tr>
+                <td><input type="text" id="ham1_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ham2_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ham3_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ham4_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+              </tr>
+
+              <tr><td colspan="4" class="baslik-satiri">🧫 İLAÇ KARIŞIM ORANLARI (%)</td></tr>
+              <tr>
+                <th style="width: 25%;">İlaç 1 (%)</th>
+                <th style="width: 25%;">İlaç 2 (%)</th>
+                <th style="width: 25%;">İlaç 3 (%)</th>
+                <th style="width: 25%;">İlaç 4 (%)</th>
+              </tr>
+              <tr>
+                <td><input type="text" id="ilac1" placeholder="%"></td>
+                <td><input type="text" id="ilac2" placeholder="%"></td>
+                <td><input type="text" id="ilac3" placeholder="%"></td>
+                <td><input type="text" id="ilac4" placeholder="%"></td>
+              </tr>
+              <tr>
+                <td><input type="text" id="ilac1_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ilac2_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ilac3_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ilac4_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mb-1">
+          <label for="notlar" class="fw-bold text-dark small mb-1">📝 RAPOR NOTLARI / AÇIKLAMA:</label>
+          <textarea id="notlar" class="form-control notlar-alani" rows="2" placeholder="Üretim veya süreçle ilgili notlarınızı yazınız..."></textarea>
+        </div>
+      </div>
+
+      <div class="card border-2 border-dashed border-primary p-2 text-center mb-2 no-print bg-light" style="border-radius: 8px;">
+        <h6 class="fw-bold text-primary mb-1 small">📷 Fotoğraf Ekle (En fazla 15 Adet)</h6>
+        <input type="file" id="fotoYukleInput" multiple accept="image/*" class="d-none" onchange="fotograflariIsle(this)">
+        <div>
+          <label for="fotoYukleInput" class="btn btn-primary btn-sm px-3 py-1 fw-bold shadow-sm" style="background-color: var(--accent-color);">Fotoğraf Seç</label>
+          <span class="ms-2 fw-bold text-secondary small" id="fotoSayac">(0 / 15)</span>
+        </div>
+      </div>
+
+      <div id="fotoGaleriAlani" class="foto-liste"></div>
     </div>
   </div>
 
+  <div class="modal fade" id="detayModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title fw-bold">Rapor Detayı & İşlemler</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+        </div>
+        <div class="modal-body p-1" id="detayModalIcerik"></div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-secondary btn-sm fw-bold" data-bs-dismiss="modal">Kapat</button>
+          <div>
+            <button onclick="pdfPaylas()" class="btn btn-success btn-sm me-1 fw-bold">💬 WhatsApp / Paylaş</button>
+            <button onclick="window.print()" class="btn btn-dark btn-sm me-1 fw-bold">🖨️ Yazdır</button>
+            <button onclick="pdfIndir()" class="btn btn-danger btn-sm fw-bold">📄 PDF İndir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    const SABIT_KULLANICI = "bunyamin";
+    const SABIT_SIFRE = "Busra.5744";
+
+    const SUPABASE_URL = 'https://ihsetoxxggiaeulpqhzg.supabase.co';
+    const SUPABASE_KEY = "sb_publishable_HoqAcz7S0ANBNyQTj6fjew_YCa_71nb";
+    
+    const _supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+    document.getElementById('tarih').valueAsDate = new Date();
+    let tumFotoBase64Listesi = [];
+    let aktifRaporId = null;
+    window.tumRaporlar = [];
+
+    window.onload = function() { 
+      if (localStorage.getItem('uretim_oturum') === 'acik') {
+        document.getElementById('loginEkran').style.display = 'none';
+        document.getElementById('anaUygulama').style.display = 'block';
+        if (_supabase) kayitliRaporlariListele(); 
+      }
+    };
+
+    function girisYap(event) {
+      event.preventDefault();
+      const kAd = document.getElementById('loginKullanici').value;
+      const sifre = document.getElementById('loginSifre').value;
+
+      if (kAd === SABIT_KULLANICI && sifre === SABIT_SIFRE) {
+        localStorage.setItem('uretim_oturum', 'acik');
+        document.getElementById('loginEkran').style.display = 'none';
+        document.getElementById('anaUygulama').style.display = 'block';
+        document.getElementById('loginHata').classList.add('d-none');
+        if (_supabase) kayitliRaporlariListele();
+      } else {
+        document.getElementById('loginHata').classList.remove('d-none');
+      }
+    }
+
+    function cikisYap() {
+      localStorage.removeItem('uretim_oturum');
+      location.reload();
+    }
+
+    function fotoSikistirVeOku(file, callback) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          const max_size = 1400;
+          if (width > height) {
+            if (width > max_size) { height *= max_size / width; width = max_size; }
+          } else {
+            if (height > max_size) { width *= max_size / height; height = max_size; }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.88);
+          callback(compressedBase64);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function fotograflariIsle(input) {
+      const files = Array.from(input.files);
+      if (tumFotoBase64Listesi.length + files.length > 15) {
+        alert("En fazla 15 adet fotoğraf ekleyebilirsiniz!");
+        return;
+      }
+      files.forEach(file => {
+        fotoSikistirVeOku(file, function(base64Data) {
+          tumFotoBase64Listesi.push(base64Data);
+          galeriyiEkranaCiz(base64Data, tumFotoBase64Listesi.length - 1);
+        });
+      });
+      input.value = "";
+    }
+
+    function galeriyiEkranaCiz(src, index) {
+      const alan = document.getElementById('fotoGaleriAlani');
+      document.getElementById('fotoSayac').innerText = `(${tumFotoBase64Listesi.length} / 15)`;
+
+      const div = document.createElement('div');
+      div.className = "foto-kart";
+      div.innerHTML = `
+        <button class="btn btn-sm btn-danger foto-sil-btn no-print" onclick="fotoSil(${index})">❌ Sil</button>
+        <img src="${src}">
+      `;
+      alan.appendChild(div);
+    }
+
+    function fotoSil(index) {
+      tumFotoBase64Listesi.splice(index, 1);
+      const alan = document.getElementById('fotoGaleriAlani');
+      alan.innerHTML = "";
+      tumFotoBase64Listesi.forEach((src, i) => galeriyiEkranaCiz(src, i));
+      document.getElementById('fotoSayac').innerText = `(${tumFotoBase64Listesi.length} / 15)`;
+    }
+
+    async function veriyiKaydet() {
+      if (!_supabase) {
+        alert("Supabase bağlantısı kurulamadı!");
+        return;
+      }
+
+      const btn = document.getElementById('btnKaydet');
+      btn.innerText = "⏳...";
+      btn.disabled = true;
+
+      const payload = {
+        musteri_adi: document.getElementById('musteriAdi').value,
+        urun_adi: document.getElementById('urunAdi').value,
+        tarih: document.getElementById('tarih').value,
+        hat_hizi: document.getElementById('hatHizi').value,
+        gram: document.getElementById('gram').value,
+        renk: document.getElementById('renk').value,
+        kesim_eni: document.getElementById('kesimEni').value,
+        sarim: document.getElementById('sarim').value,
+        cap: document.getElementById('cap').value,
+        firin_isi: document.getElementById('firinIsi').value,
+        ham1: document.getElementById('ham1').value, ham2: document.getElementById('ham2').value,
+        ham3: document.getElementById('ham3').value, ham4: document.getElementById('ham4').value,
+        ham1_kod: document.getElementById('ham1_kod').value, ham2_kod: document.getElementById('ham2_kod').value,
+        ham3_kod: document.getElementById('ham3_kod').value, ham4_kod: document.getElementById('ham4_kod').value,
+        ilac1: document.getElementById('ilac1').value, ilac2: document.getElementById('ilac2').value,
+        ilac3: document.getElementById('ilac3').value, ilac4: document.getElementById('ilac4').value,
+        ilac1_kod: document.getElementById('ilac1_kod').value, ilac2_kod: document.getElementById('ilac2_kod').value,
+        ilac3_kod: document.getElementById('ilac3_kod').value, ilac4_kod: document.getElementById('ilac4_kod').value,
+        notlar: document.getElementById('notlar').value,
+        foto_listesi: tumFotoBase64Listesi
+      };
+
+      try {
+        if (aktifRaporId) {
+          const { error } = await _supabase.from('uretim_fotogaleri').update(payload).eq('id', aktifRaporId);
+          if (error) throw error;
+          alert("Rapor güncellendi!");
+        } else {
+          const { error } = await _supabase.from('uretim_fotogaleri').insert([payload]);
+          if (error) throw error;
+          alert("Yeni rapor kaydedildi!");
+        }
+        formuTemizle();
+        kayitliRaporlariListele();
+      } catch (err) {
+        alert("Kayıt Hatası: " + err.message);
+      } finally {
+        btn.innerText = "💾 Kaydet";
+        btn.disabled = false;
+      }
+    }
+
+    async function kayitliRaporlariListele() {
+      const alan = document.getElementById('raporListesiAlani');
+      alan.innerHTML = '<div class="text-secondary small text-center">Yükleniyor...</div>';
+
+      const { data, error } = await _supabase.from('uretim_fotogaleri').select('*').order('id', { ascending: false });
+      if (error || !data || data.length === 0) {
+        alan.innerHTML = '<div class="text-secondary small text-center">Kayıtlı rapor bulunmuyor.</div>';
+        return;
+      }
+
+      window.tumRaporlar = data;
+      listeyiEkranaBas(data);
+    }
+
+    function listeyiEkranaBas(dataListesi) {
+      const alan = document.getElementById('raporListesiAlani');
+      alan.innerHTML = "";
+
+      if (dataListesi.length === 0) {
+        alan.innerHTML = '<div class="text-secondary small text-center">Eşleşen kayıt bulunamadı.</div>';
+        return;
+      }
+
+      dataListesi.forEach(item => {
+        const col = document.createElement('div');
+        col.className = 'col-12';
+        col.innerHTML = `
+          <div class="liste-kart d-flex justify-content-between align-items-center py-2 px-2 my-1">
+            <div>
+              <div class="fw-bold text-dark small">${item.musteri_adi ? item.musteri_adi + ' - ' : ''}${item.urun_adi || 'Başlıksız Ürün'}</div>
+              <div class="small text-muted" style="font-size:10px;">📅 ${item.tarih || '-'} ${item.hat_hizi ? '| ⚡ ' + item.hat_hizi : ''}</div>
+            </div>
+            <div>
+              <button onclick="raporDetayGoster(${item.id})" class="btn btn-sm btn-info text-white p-1 fw-bold">👁️</button>
+              <button onclick="raporDuzenle(${item.id})" class="btn btn-sm btn-warning text-white p-1 fw-bold">✏️</button>
+              <button onclick="raporSil(${item.id})" class="btn btn-sm btn-danger p-1 fw-bold">🗑️</button>
+            </div>
+          </div>
+        `;
+        alan.appendChild(col);
+      });
+    }
+
+    function raporlariFiltrele(aramaMetni) {
+      const arama = aramaMetni.toLowerCase().trim();
+      const filtrelenmis = window.tumRaporlar.filter(item => {
+        const musteri = (item.musteri_adi || '').toLowerCase();
+        const urun = (item.urun_adi || '').toLowerCase();
+        return musteri.includes(arama) || urun.includes(arama);
+      });
+      listeyiEkranaBas(filtrelenmis);
+    }
+
+    function raporDuzenle(id) {
+      const rapor = window.tumRaporlar.find(r => r.id == id);
+      if (!rapor) return;
+
+      aktifRaporId = rapor.id;
+      document.getElementById('btnKaydet').innerText = "🔄 Güncelle";
+
+      document.getElementById('musteriAdi').value = rapor.musteri_adi || '';
+      document.getElementById('urunAdi').value = rapor.urun_adi || '';
+      document.getElementById('tarih').value = rapor.tarih || '';
+      document.getElementById('hatHizi').value = rapor.hat_hizi || '';
+      document.getElementById('gram').value = rapor.gram || '';
+      document.getElementById('renk').value = rapor.renk || '';
+      
+      document.getElementById('kesimEni').value = rapor.kesim_eni || '';
+      document.getElementById('sarim').value = rapor.sarim || '';
+      document.getElementById('cap').value = rapor.cap || '';
+      document.getElementById('firinIsi').value = rapor.firin_isi || '';
+
+      document.getElementById('ham1').value = rapor.ham1 || '';
+      document.getElementById('ham2').value = rapor.ham2 || '';
+      document.getElementById('ham3').value = rapor.ham3 || '';
+      document.getElementById('ham4').value = rapor.ham4 || '';
+      document.getElementById('ham1_kod').value = rapor.ham1_kod || '';
+      document.getElementById('ham2_kod').value = rapor.ham2_kod || '';
+      document.getElementById('ham3_kod').value = rapor.ham3_kod || '';
+      document.getElementById('ham4_kod').value = rapor.ham4_kod || '';
+
+      document.getElementById('ilac1').value = rapor.ilac1 || '';
+      document.getElementById('ilac2').value = rapor.ilac2 || '';
+      document.getElementById('ilac3').value = rapor.ilac3 || '';
+      document.getElementById('ilac4').value = rapor.ilac4 || '';
+      document.getElementById('ilac1_kod').value = rapor.ilac1_kod || '';
+      document.getElementById('ilac2_kod').value = rapor.ilac2_kod || '';
+      document.getElementById('ilac3_kod').value = rapor.ilac3_kod || '';
+      document.getElementById('ilac4_kod').value = rapor.ilac4_kod || '';
+
+      document.getElementById('notlar').value = rapor.notlar || '';
+
+      document.getElementById('fotoGaleriAlani').innerHTML = "";
+      tumFotoBase64Listesi = Array.isArray(rapor.foto_listesi) ? rapor.foto_listesi : [];
+      tumFotoBase64Listesi.forEach((src, index) => galeriyiEkranaCiz(src, index));
+
+      window.scrollTo({ top: document.getElementById('yazdirilacakAlan').offsetTop - 10, behavior: 'smooth' });
+    }
+
+    function raporDetayGoster(id) {
+      raporDuzenle(id);
+      const detayIcerik = document.getElementById('yazdirilacakAlan').cloneNode(true);
+      detayIcerik.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
+      
+      const modalBody = document.getElementById('detayModalIcerik');
+      modalBody.innerHTML = "";
+      modalBody.appendChild(detayIcerik);
+
+      const modal = new bootstrap.Modal(document.getElementById('detayModal'));
+      modal.show();
+    }
+
+    async function raporSil(id) {
+      if (!confirm("Bu raporu silmek istediğinize emin misiniz?")) return;
+      const { error } = await _supabase.from('uretim_fotogaleri').delete().eq('id', id);
+      if (error) {
+        alert("Silme hatası: " + error.message);
+      } else {
+        alert("Rapor silindi.");
+        kayitliRaporlariListele();
+      }
+    }
+
+    function formuTemizle() {
+      aktifRaporId = null;
+      document.getElementById('btnKaydet').innerText = "💾 Kaydet";
+      document.querySelectorAll('#yazdirilacakAlan input, #yazdirilacakAlan textarea').forEach(i => i.value = "");
+      document.getElementById('tarih').valueAsDate = new Date();
+      document.getElementById('fotoGaleriAlani').innerHTML = "";
+      tumFotoBase64Listesi = [];
+      document.getElementById('fotoSayac').innerText = "(0 / 15)";
+    }
+
     function pdfAyarlari() {
       return {
         margin: [5, 5, 5, 5],
@@ -95,31 +635,26 @@
     }
 
     function pdfIndir() {
-      const element = document.getElementById('pdf-icerik');
-      html2pdf().from(element).set(pdfAyarlari()).save();
+      const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
+      element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
+      html2pdf().set(pdfAyarlari()).from(element).save();
     }
 
     async function pdfPaylas() {
-      const element = document.getElementById('pdf-icerik');
+      const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
+      element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
       try {
-        const worker = html2pdf().from(element).set(pdfAyarlari());
-        const pdfBlob = await worker.outputPdf('blob');
-        const file = new File([pdfBlob], 'uretim_proses_raporu.pdf', { type: 'application/pdf' });
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            title: 'Üretim Proses Raporu',
-            text: 'Güncel üretim ekranı raporu ektedir.',
-            files: [file]
-          });
+        const pdfBlob = await html2pdf().set(pdfAyarlari()).from(element).outputPdf('blob');
+        const dosya = new File([pdfBlob], 'uretim_proses_raporu.pdf', { type: 'application/pdf' });
+        if (navigator.canShare && navigator.canShare({ files: [dosya] })) {
+          await navigator.share({ files: [dosya], title: 'Üretim Proses Raporu' });
         } else {
-          alert('Tarayıcınız dosya paylaşımını desteklemiyor. Lütfen PDF İndir seçeneğini kullanın.');
+          pdfIndir();
         }
-      } catch (error) {
-        console.error('Paylaşım hatası:', error);
+      } catch (err) {
+        alert("Paylaşım hatası: " + err.message);
       }
     }
   </script>
-
 </body>
 </html>
