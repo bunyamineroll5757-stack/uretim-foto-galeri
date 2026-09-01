@@ -91,13 +91,13 @@
       background: linear-gradient(90deg, #0f172a 0%, #2563eb 100%) !important; 
       color: #ffffff !important;
       font-weight: 700; 
-      text-align: center !important; /* İstendiği gibi ortalandı */
+      text-align: center !important; 
       padding: 6px !important; 
       font-size: 12px !important; 
       letter-spacing: 0.5px;
     }
 
-    /* Birimli (CM, MT, °C) giriş alanları için ortak esnek yapı */
+    /* Birimli (CM, MT, °C veya %) giriş alanları için ortak esnek yapı */
     .suffix-container {
       display: flex;
       align-items: center;
@@ -132,6 +132,43 @@
       color: #64748b;
       margin-left: 3px;
       user-select: none;
+    }
+
+    /* Başta yüzde işareti olması istenen alanlar için özel yapı */
+    .prefix-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      padding: 2px 4px;
+      width: 100%;
+    }
+    .prefix-container:focus-within {
+      background-color: #ffffff;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 4px rgba(37, 99, 235, 0.4);
+    }
+    .prefix-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      margin-right: 3px;
+      user-select: none;
+    }
+    .prefix-input {
+      border: none !important;
+      background: transparent !important;
+      text-align: left !important;
+      padding: 2px 0 !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      width: auto !important;
+      max-width: 75% !important;
+      font-size: 12px !important;
+      font-weight: 600;
+      color: #0f172a !important;
     }
     
     .foto-liste { 
@@ -281,7 +318,6 @@
             </tbody>
           </table>
 
-          <!-- Ürün Adı satırından hemen sonra eklenen yeni sütun/tablo -->
           <table class="table uretim-tablo">
             <thead>
               <tr>
@@ -347,10 +383,30 @@
                 <th style="width: 25%;">Ham 4 (%)</th>
               </tr>
               <tr>
-                <td><input type="text" id="ham1" placeholder="%"></td>
-                <td><input type="text" id="ham2" placeholder="%"></td>
-                <td><input type="text" id="ham3" placeholder="%"></td>
-                <td><input type="text" id="ham4" placeholder="%"></td>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ham1" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ham2" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ham3" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ham4" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
               </tr>
               <tr>
                 <td><input type="text" id="ham1_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
@@ -367,10 +423,30 @@
                 <th style="width: 25%;">İlaç 4 (%)</th>
               </tr>
               <tr>
-                <td><input type="text" id="ilac1" placeholder="%"></td>
-                <td><input type="text" id="ilac2" placeholder="%"></td>
-                <td><input type="text" id="ilac3" placeholder="%"></td>
-                <td><input type="text" id="ilac4" placeholder="%"></td>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ilac1" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ilac2" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ilac3" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ilac4" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
               </tr>
               <tr>
                 <td><input type="text" id="ilac1_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
