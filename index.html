@@ -91,9 +91,10 @@
       background: linear-gradient(90deg, #0f172a 0%, #2563eb 100%) !important; 
       color: #ffffff !important;
       font-weight: 700; 
-      text-align: left !important; 
-      padding-left: 8px !important; 
+      text-align: center !important; /* İstendiği gibi ortalandı */
+      padding: 6px !important; 
       font-size: 12px !important; 
+      letter-spacing: 0.5px;
     }
 
     /* Birimli (CM, MT, °C) giriş alanları için ortak esnek yapı */
@@ -245,22 +246,20 @@
 
     <div class="rapor-kutu" id="yazdirilacakAlan">
       <div>
-        <div class="pdf-baslik">ÜRETİM AYARLARI VE FOTOĞRAF RAPORU</div>
+        <div class="pdf-baslik">ÜRETİM RAPORU</div>
 
         <div class="table-responsive">
           <table class="table uretim-tablo">
             <thead>
               <tr>
-                <th style="width: 50%;">Müşteri Adı</th>
-                <th style="width: 33%;">Tarih</th>
-                <th style="width: 17%;">Hat Hızı</th>
+                <th style="width: 55%;">Müşteri Adı</th>
+                <th style="width: 45%;">Tarih</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td><input type="text" id="musteriAdi" placeholder="Müşteri Adı"></td>
                 <td><input type="date" id="tarih"></td>
-                <td><input type="text" id="hatHizi" placeholder="Hız"></td>
               </tr>
             </tbody>
           </table>
@@ -268,9 +267,9 @@
           <table class="table uretim-tablo">
             <thead>
               <tr>
-                <th style="width: 33.33%;">Ürün Adı</th>
-                <th style="width: 33.33%;">Gram</th>
-                <th style="width: 33.33%;">Renk</th>
+                <th style="width: 34%;">Ürün Adı</th>
+                <th style="width: 33%;">Gram</th>
+                <th style="width: 33%;">Renk</th>
               </tr>
             </thead>
             <tbody>
@@ -278,6 +277,24 @@
                 <td><input type="text" id="urunAdi" placeholder="Ürün Adı"></td>
                 <td><input type="text" id="gram" placeholder="Gram"></td>
                 <td><input type="text" id="renk" placeholder="Renk"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Ürün Adı satırından hemen sonra eklenen yeni sütun/tablo -->
+          <table class="table uretim-tablo">
+            <thead>
+              <tr>
+                <th style="width: 33.33%;">Tarak Hız</th>
+                <th style="width: 33.33%;">Saatlik Kg</th>
+                <th style="width: 33.33%;">Kalınlık</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text" id="tarakHiz" placeholder="Tarak hız..."></td>
+                <td><input type="text" id="saatlikKg" placeholder="Saatlik kg..."></td>
+                <td><input type="text" id="kalinlik" placeholder="Kalınlık..."></td>
               </tr>
             </tbody>
           </table>
@@ -527,7 +544,9 @@
         musteri_adi: document.getElementById('musteriAdi').value,
         urun_adi: document.getElementById('urunAdi').value,
         tarih: document.getElementById('tarih').value,
-        hat_hizi: document.getElementById('hatHizi').value,
+        tarak_hiz: document.getElementById('tarakHiz').value,
+        saatlik_kg: document.getElementById('saatlikKg').value,
+        kalinlik: document.getElementById('kalinlik').value,
         gram: document.getElementById('gram').value,
         renk: document.getElementById('renk').value,
         kesim_eni: document.getElementById('kesimEni').value,
@@ -596,7 +615,7 @@
           <div class="liste-kart d-flex justify-content-between align-items-center py-2 px-2 my-1">
             <div>
               <div class="fw-bold text-dark small">${item.musteri_adi ? item.musteri_adi + ' - ' : ''}${item.urun_adi || 'Başlıksız Ürün'}</div>
-              <div class="small text-muted" style="font-size:10px;">📅 ${item.tarih || '-'} ${item.hat_hizi ? '| ⚡ ' + item.hat_hizi : ''}</div>
+              <div class="small text-muted" style="font-size:10px;">📅 ${item.tarih || '-'} ${item.tarak_hiz ? '| ⚡ ' + item.tarak_hiz : ''}</div>
             </div>
             <div>
               <button onclick="raporDetayGoster(${item.id})" class="btn btn-sm btn-info text-white p-1 fw-bold">👁️</button>
@@ -629,7 +648,9 @@
       document.getElementById('musteriAdi').value = rapor.musteri_adi || '';
       document.getElementById('urunAdi').value = rapor.urun_adi || '';
       document.getElementById('tarih').value = rapor.tarih || '';
-      document.getElementById('hatHizi').value = rapor.hat_hizi || '';
+      document.getElementById('tarakHiz').value = rapor.tarak_hiz || '';
+      document.getElementById('saatlikKg').value = rapor.saatlik_kg || '';
+      document.getElementById('kalinlik').value = rapor.kalinlik || '';
       document.getElementById('gram').value = rapor.gram || '';
       document.getElementById('renk').value = rapor.renk || '';
       
