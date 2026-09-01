@@ -164,16 +164,31 @@
       <div class="d-flex justify-content-between align-items-center mb-2">
         <a href="./index.html" class="btn btn-outline-dark btn-sm px-2 fw-bold">← Ana Sistem</a>
         <div>
-          <button onclick="formuTemizle()" class="btn btn-outline-primary btn-sm me-1 px-2 fw-bold">➕ Yeni</button>
-          <button onclick="veriyiKaydet()" class="btn btn-success btn-sm me-1 px-2 fw-bold" id="btnKaydet">💾 Kaydet</button>
+          <button onclick="formuTemizle()" class="btn btn-outline-primary btn-sm me-1 fw-bold">➕ Yeni</button>
+          <button onclick="veriyiKaydet()" class="btn btn-success btn-sm me-1 fw-bold" id="btnKaydet">💾 Kaydet</button>
           <button onclick="cikisYap()" class="btn btn-outline-danger btn-sm px-2 fw-bold">🚪 Çıkış</button>
         </div>
       </div>
 
-      <div class="card p-2 border-0 shadow-sm mb-2" style="border-radius: 8px;">
-        <h6 class="fw-bold text-dark mb-2">📋 Kayıtlı Galeri Raporları</h6>
-        <div id="raporListesiAlani" class="row g-2">
-          <div class="text-secondary small text-center">Raporlar yükleniyor...</div>
+      <!-- AKORDEON SEKME (REÇETE / RAPOR ARAMA) -->
+      <div class="accordion mb-2 shadow-sm" id="accordionRaporlar">
+        <div class="accordion-item border-0" style="border-radius: 8px; overflow: hidden;">
+          <h2 class="accordion-header" id="headingRaporlar">
+            <button class="accordion-button collapsed py-2 px-3 fw-bold bg-white text-dark shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRaporlar" aria-expanded="false" aria-controls="collapseRaporlar" style="font-size: 13px;">
+              📋 Kayıtlı Galeri Raporları & Arama
+            </button>
+          </h2>
+          <div id="collapseRaporlar" class="accordion-collapse collapse" aria-labelledby="headingRaporlar" data-bs-parent="#accordionRaporlar">
+            <div class="accordion-body bg-light p-2">
+              <div class="input-group input-group-sm mb-2">
+                <span class="input-group-text bg-white">🔍</span>
+                <input type="text" id="aramaKutusu" class="form-control form-control-sm" placeholder="Müşteri veya ürün adı ile reçete ara..." oninput="raporlariFiltrele(this.value)">
+              </div>
+              <div id="raporListesiAlani" class="row g-2" style="max-height: 250px; overflow-y: auto;">
+                <div class="text-secondary small text-center">Raporlar yükleniyor...</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -320,6 +335,7 @@
     document.getElementById('tarih').valueAsDate = new Date();
     let tumFotoBase64Listesi = [];
     let aktifRaporId = null;
+    window.tumRaporlar = [];
 
     window.onload = function() { 
       if (localStorage.getItem('uretim_oturum') === 'acik') {
@@ -478,13 +494,23 @@
       }
 
       window.tumRaporlar = data;
+      listeyiEkranaBas(data);
+    }
+
+    function listeyiEkranaBas(dataListesi) {
+      const alan = document.getElementById('raporListesiAlani');
       alan.innerHTML = "";
 
-      data.forEach(item => {
+      if (dataListesi.length === 0) {
+        alan.innerHTML = '<div class="text-secondary small text-center">Eşleşen kayıt bulunamadı.</div>';
+        return;
+      }
+
+      dataListesi.forEach(item => {
         const col = document.createElement('div');
-        col.className = 'col-12 col-md-6 col-lg-4';
+        col.className = 'col-12';
         col.innerHTML = `
-          <div class="liste-kart d-flex justify-content-between align-items-center">
+          <div class="liste-kart d-flex justify-content-between align-items-center py-2 px-2 my-1">
             <div>
               <div class="fw-bold text-dark small">${item.musteri_adi ? item.musteri_adi + ' - ' : ''}${item.urun_adi || 'Başlıksız Ürün'}</div>
               <div class="small text-muted" style="font-size:10px;">📅 ${item.tarih || '-'}</div>
@@ -498,6 +524,16 @@
         `;
         alan.appendChild(col);
       });
+    }
+
+    function raporlariFiltrele(aramaMetni) {
+      const arama = aramaMetni.toLowerCase().trim();
+      const filtrelenmis = window.tumRaporlar.filter(item => {
+        const musteri = (item.musteri_adi || '').toLowerCase();
+        const urun = (item.urun_adi || '').toLowerCase();
+        return musteri.includes(arama) || urun.includes(arama);
+      });
+      listeyiEkranaBas(filtrelenmis);
     }
 
     function raporDuzenle(id) {
