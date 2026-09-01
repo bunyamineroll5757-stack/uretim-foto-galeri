@@ -10,8 +10,28 @@
   <style>
     body { background-color: #f4f6f9; font-family: Arial, sans-serif; padding: 0 !important; margin: 0 !important; }
     
+    /* Login Ekranı Stilleri */
+    #loginEkran {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: #1e293b;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
+    .login-kutu {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
     /* Mobil Kenar Boşluklarını Sıfırlama */
-    .main-wrapper { max-width: 100%; padding: 4px; margin: 0 auto; }
+    .main-wrapper { max-width: 100%; padding: 4px; margin: 0 auto; display: none; }
     .rapor-kutu { background: #fff; padding: 8px !important; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); width: 100% !important; margin: 0 !important; }
     .pdf-baslik { text-align: center; font-weight: bold; color: #1e293b; border-bottom: 2px solid #0d6efd; padding-bottom: 6px; margin-bottom: 12px; font-size: 18px; text-transform: uppercase; }
     
@@ -50,14 +70,34 @@
 </head>
 <body>
 
-  <div class="main-wrapper">
+  <!-- KULLANICI GİRİŞ EKRANI -->
+  <div id="loginEkran">
+    <div class="login-kutu">
+      <h5 class="fw-bold text-center text-primary mb-3">🔒 Sistem Girişi</h5>
+      <form onsubmit="girisYap(event)">
+        <div class="mb-2">
+          <label class="form-label small fw-bold">Kullanıcı Adı</label>
+          <input type="text" id="loginKullanici" class="form-control form-control-sm" required placeholder="Kullanıcı adı">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Şifre</label>
+          <input type="password" id="loginSifre" class="form-control form-control-sm" required placeholder="Şifre">
+        </div>
+        <div id="loginHata" class="text-danger small mb-2 d-none">Hatalı kullanıcı adı veya şifre!</div>
+        <button type="submit" class="btn btn-primary btn-sm w-100 fw-bold">Giriş Yap</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ANA UYGULAMA İÇERİĞİ -->
+  <div class="main-wrapper" id="anaUygulama">
     <div class="container-fluid mb-2 no-print p-1">
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <!-- Ana sistem linki düzeltildi -->
         <a href="./index.html" class="btn btn-outline-secondary btn-sm px-2">← Ana Sistem</a>
         <div>
           <button onclick="formuTemizle()" class="btn btn-outline-primary btn-sm me-1 px-2">➕ Yeni</button>
-          <button onclick="veriyiKaydet()" class="btn btn-success btn-sm px-2" id="btnKaydet">💾 Kaydet</button>
+          <button onclick="veriyiKaydet()" class="btn btn-success btn-sm me-1 px-2" id="btnKaydet">💾 Kaydet</button>
+          <button onclick="cikisYap()" class="btn btn-outline-danger btn-sm px-2">🚪 Çıkış</button>
         </div>
       </div>
 
@@ -179,6 +219,10 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    // KULLANICI GİRİŞ BİLGİLERİ (İstediğiniz gibi değiştirebilirsiniz)
+    const SABIT_KULLANICI = "bunyamin";
+    const SABIT_SIFRE = "Busra.5744";
+
     const SUPABASE_URL = 'https://ihsetoxxggiaeulpqhzg.supabase.co';
     const SUPABASE_KEY = "sb_publishable_HoqAcz7S0ANBNyQTj6fjew_YCa_71nb";
     
@@ -189,8 +233,34 @@
     let aktifRaporId = null;
 
     window.onload = function() { 
-      if (_supabase) kayitliRaporlariListele(); 
+      // Oturum kontrolü
+      if (localStorage.getItem('uretim_oturum') === 'acik') {
+        document.getElementById('loginEkran').style.display = 'none';
+        document.getElementById('anaUygulama').style.display = 'block';
+        if (_supabase) kayitliRaporlariListele(); 
+      }
     };
+
+    function girisYap(event) {
+      event.preventDefault();
+      const kAd = document.getElementById('loginKullanici').value;
+      const sifre = document.getElementById('loginSifre').value;
+
+      if (kAd === SABIT_KULLANICI && sifre === SABIT_SIFRE) {
+        localStorage.setItem('uretim_oturum', 'acik');
+        document.getElementById('loginEkran').style.display = 'none';
+        document.getElementById('anaUygulama').style.display = 'block';
+        document.getElementById('loginHata').classList.add('d-none');
+        if (_supabase) kayitliRaporlariListele();
+      } else {
+        document.getElementById('loginHata').classList.remove('d-none');
+      }
+    }
+
+    function cikisYap() {
+      localStorage.removeItem('uretim_oturum');
+      location.reload();
+    }
 
     function fotoSikistirVeOku(file, callback) {
       const reader = new FileReader();
