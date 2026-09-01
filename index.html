@@ -439,4 +439,167 @@
 
       try {
         if (aktifRaporId) {
-          const { error } = await _supabase.from('uretim_fotogaleri').update(payload).eq(
+          const { error } = await _supabase.from('uretim_fotogaleri').update(payload).eq('id', aktifRaporId);
+          if (error) throw error;
+          alert("Rapor güncellendi!");
+        } else {
+          const { error } = await _supabase.from('uretim_fotogaleri').insert([payload]);
+          if (error) throw error;
+          alert("Yeni rapor kaydedildi!");
+        }
+        formuTemizle();
+        kayitliRaporlariListele();
+      } catch (err) {
+        alert("Kayıt Hatası: " + err.message);
+      } finally {
+        btn.innerText = "💾 Kaydet";
+        btn.disabled = false;
+      }
+    }
+
+    async function kayitliRaporlariListele() {
+      const alan = document.getElementById('raporListesiAlani');
+      alan.innerHTML = '<div class="text-secondary small text-center">Yükleniyor...</div>';
+
+      const { data, error } = await _supabase.from('uretim_fotogaleri').select('*').order('id', { ascending: false });
+      if (error || !data || data.length === 0) {
+        alan.innerHTML = '<div class="text-secondary small text-center">Kayıtlı rapor bulunmuyor.</div>';
+        return;
+      }
+
+      window.tumRaporlar = data;
+      alan.innerHTML = "";
+
+      data.forEach(item => {
+        const col = document.createElement('div');
+        col.className = 'col-12 col-md-6 col-lg-4';
+        col.innerHTML = `
+          <div class="liste-kart d-flex justify-content-between align-items-center">
+            <div>
+              <div class="fw-bold text-dark small">${item.musteri_adi ? item.musteri_adi + ' - ' : ''}${item.urun_adi || 'Başlıksız Ürün'}</div>
+              <div class="small text-muted" style="font-size:10px;">📅 ${item.tarih || '-'} | ⚙️ ${item.makina || '-'}</div>
+            </div>
+            <div>
+              <button onclick="raporDetayGoster(${item.id})" class="btn btn-sm btn-info text-white p-1 fw-bold">👁️</button>
+              <button onclick="raporDuzenle(${item.id})" class="btn btn-sm btn-warning text-white p-1 fw-bold">✏️</button>
+              <button onclick="raporSil(${item.id})" class="btn btn-sm btn-danger p-1 fw-bold">🗑️</button>
+            </div>
+          </div>
+        `;
+        alan.appendChild(col);
+      });
+    }
+
+    function raporDuzenle(id) {
+      const rapor = window.tumRaporlar.find(r => r.id == id);
+      if (!rapor) return;
+
+      aktifRaporId = rapor.id;
+      document.getElementById('btnKaydet').innerText = "🔄 Güncelle";
+
+      document.getElementById('musteriAdi').value = rapor.musteri_adi || '';
+      document.getElementById('urunAdi').value = rapor.urun_adi || '';
+      document.getElementById('tarih').value = rapor.tarih || '';
+      document.getElementById('gram').value = rapor.gram || '';
+      document.getElementById('renk').value = rapor.renk || '';
+      document.getElementById('makina').value = rapor.makina || '';
+      
+      document.getElementById('kesimEni').value = rapor.kesim_eni || '';
+      document.getElementById('sarim').value = rapor.sarim || '';
+      document.getElementById('cap').value = rapor.cap || '';
+      document.getElementById('firinIsi').value = rapor.firin_isi || '';
+
+      document.getElementById('ham1').value = rapor.ham1 || '';
+      document.getElementById('ham2').value = rapor.ham2 || '';
+      document.getElementById('ham3').value = rapor.ham3 || '';
+      document.getElementById('ham4').value = rapor.ham4 || '';
+      document.getElementById('ham1_kod').value = rapor.ham1_kod || '';
+      document.getElementById('ham2_kod').value = rapor.ham2_kod || '';
+      document.getElementById('ham3_kod').value = rapor.ham3_kod || '';
+      document.getElementById('ham4_kod').value = rapor.ham4_kod || '';
+
+      document.getElementById('ilac1').value = rapor.ilac1 || '';
+      document.getElementById('ilac2').value = rapor.ilac2 || '';
+      document.getElementById('ilac3').value = rapor.ilac3 || '';
+      document.getElementById('ilac4').value = rapor.ilac4 || '';
+      document.getElementById('ilac1_kod').value = rapor.ilac1_kod || '';
+      document.getElementById('ilac2_kod').value = rapor.ilac2_kod || '';
+      document.getElementById('ilac3_kod').value = rapor.ilac3_kod || '';
+      document.getElementById('ilac4_kod').value = rapor.ilac4_kod || '';
+
+      document.getElementById('notlar').value = rapor.notlar || '';
+
+      document.getElementById('fotoGaleriAlani').innerHTML = "";
+      tumFotoBase64Listesi = Array.isArray(rapor.foto_listesi) ? rapor.foto_listesi : [];
+      tumFotoBase64Listesi.forEach((src, index) => galeriyiEkranaCiz(src, index));
+
+      window.scrollTo({ top: document.getElementById('yazdirilacakAlan').offsetTop - 10, behavior: 'smooth' });
+    }
+
+    function raporDetayGoster(id) {
+      raporDuzenle(id);
+      const detayIcerik = document.getElementById('yazdirilacakAlan').cloneNode(true);
+      detayIcerik.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
+      
+      const modalBody = document.getElementById('detayModalIcerik');
+      modalBody.innerHTML = "";
+      modalBody.appendChild(detayIcerik);
+
+      const modal = new bootstrap.Modal(document.getElementById('detayModal'));
+      modal.show();
+    }
+
+    async function raporSil(id) {
+      if (!confirm("Bu raporu silmek istediğinize emin misiniz?")) return;
+      const { error } = await _supabase.from('uretim_fotogaleri').delete().eq('id', id);
+      if (error) {
+        alert("Silme hatası: " + error.message);
+      } else {
+        alert("Rapor silindi.");
+        kayitliRaporlariListele();
+      }
+    }
+
+    function formuTemizle() {
+      aktifRaporId = null;
+      document.getElementById('btnKaydet').innerText = "💾 Kaydet";
+      document.querySelectorAll('#yazdirilacakAlan input, #yazdirilacakAlan textarea').forEach(i => i.value = "");
+      document.getElementById('tarih').valueAsDate = new Date();
+      document.getElementById('fotoGaleriAlani').innerHTML = "";
+      tumFotoBase64Listesi = [];
+      document.getElementById('fotoSayac').innerText = "(0 / 10)";
+    }
+
+    function pdfIndir() {
+      const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
+      element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
+      const opt = {
+        margin: [5, 5, 5, 5],
+        filename: 'uretim_proses_raporu.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+
+    async function pdfPaylas() {
+      const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
+      element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
+      const opt = {
+        margin: [5, 5, 5, 5],
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
+      const dosya = new File([pdfBlob], 'uretim_proses_raporu.pdf', { type: 'application/pdf' });
+      if (navigator.canShare && navigator.canShare({ files: [dosya] })) {
+        await navigator.share({ files: [dosya], title: 'Üretim Proses Raporu' });
+      } else {
+        pdfIndir();
+      }
+    }
+  </script>
+</body>
+</html>
