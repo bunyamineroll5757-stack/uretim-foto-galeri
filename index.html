@@ -100,24 +100,24 @@
     .foto-kart { 
       width: 100% !important; 
       max-width: 100% !important;
-      margin: 0 auto 10px auto;
+      margin: 0 auto 15px auto;
       text-align: center; 
       position: relative; 
       background: #ffffff;
-      padding: 6px;
+      padding: 8px;
       border: 1px solid #e2e8f0;
       border-radius: 6px;
       display: flex;
       justify-content: center;
       align-items: center;
-      break-inside: avoid;
-      page-break-inside: avoid;
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
     }
     .foto-kart img { 
       width: 100% !important;
-      max-width: 100% !important;
+      max-height: 350px !important;
       height: auto !important;
-      object-fit: contain;
+      object-fit: contain !important;
       display: block;
       margin: 0 auto;
       border-radius: 4px;
@@ -626,11 +626,17 @@
 
     function pdfAyarlari() {
       return {
-        margin: [4, 4, 4, 4],
+        margin: [5, 5, 5, 5],
         filename: 'uretim_proses_raporu.pdf',
         image: { type: 'jpeg', quality: 0.95 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', putOnlyUsedFonts: true }
+        html2canvas: { 
+          scale: 2, 
+          useCORS: true, 
+          letterRendering: true,
+          scrollY: 0 
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', putOnlyUsedFonts: true },
+        pagebreak: { mode: ['css', 'legacy'], avoid: ['.foto-kart', 'tr', 'table'] }
       };
     }
 
