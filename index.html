@@ -168,18 +168,17 @@
     </div>
 
     <div class="rapor-kutu" id="yazdirilacakAlan">
-      <div class="pdf-baslik">ÜRETİM FOTOĞRAFLARI VE PROSES RAPORU</div>
+      <div class="pdf-baslik">ÜRETİM AYARLARI FOTOĞRAFLARI</div>
 
       <div class="table-responsive">
         <table class="table uretim-tablo">
           <thead>
             <tr>
-              <th style="width: 25%;">Müşteri Adı</th>
-              <th style="width: 25%;">Ürün Adı</th>
-              <th style="width: 16%;">Tarih</th>
-              <th style="width: 11%;">Gram</th>
-              <th style="width: 11%;">Renk</th>
-              <th style="width: 12%;">Makina</th>
+              <th style="width: 28%;">Müşteri Adı</th>
+              <th style="width: 28%;">Ürün Adı</th>
+              <th style="width: 18%;">Tarih</th>
+              <th style="width: 13%;">Gram</th>
+              <th style="width: 13%;">Renk</th>
             </tr>
           </thead>
           <tbody>
@@ -189,15 +188,14 @@
               <td><input type="date" id="tarih"></td>
               <td><input type="text" id="gram" placeholder="Gram"></td>
               <td><input type="text" id="renk" placeholder="Renk"></td>
-              <td><input type="text" id="makina" placeholder="Makina"></td>
             </tr>
           </tbody>
         </table>
 
-        <!-- İKİNCİ TABLO: 4 AYRI PROSES ALANI -->
+        <!-- İKİNCİ TABLO: KESİM DETAY ALANI -->
         <table class="table uretim-tablo">
           <tbody>
-            <tr><td colspan="4" class="baslik-satiri">⚙️ MAKİNE VE ÜRETİM PROSES PARAMETRELERİ</td></tr>
+            <tr><td colspan="4" class="baslik-satiri">⚙️ KESİM DETAY</td></tr>
             <tr>
               <th style="width: 25%;">1. KESİM ENİ</th>
               <th style="width: 25%;">2. SARIM</th>
@@ -205,10 +203,10 @@
               <th style="width: 25%;">4. FIRIN ISI</th>
             </tr>
             <tr>
-              <td><textarea id="kesimEni" rows="3" placeholder="Kesim eni parametresi..."></textarea></td>
-              <td><textarea id="sarim" rows="3" placeholder="Sarım ayarları..."></textarea></td>
-              <td><textarea id="cap" rows="3" placeholder="Rulo çap verisi..."></textarea></td>
-              <td><textarea id="firinIsi" rows="3" placeholder="Fırın ısısı zonlar..."></textarea></td>
+              <td><input type="text" id="kesimEni" placeholder="Kesim eni..."></td>
+              <td><input type="text" id="sarim" placeholder="Sarım ayarları..."></td>
+              <td><input type="text" id="cap" placeholder="Rulo çap verisi..."></td>
+              <td><input type="text" id="firinIsi" placeholder="Fırın ısısı..."></td>
             </tr>
           </tbody>
         </table>
@@ -420,7 +418,6 @@
         tarih: document.getElementById('tarih').value,
         gram: document.getElementById('gram').value,
         renk: document.getElementById('renk').value,
-        makina: document.getElementById('makina').value,
         kesim_eni: document.getElementById('kesimEni').value,
         sarim: document.getElementById('sarim').value,
         cap: document.getElementById('cap').value,
@@ -477,7 +474,7 @@
           <div class="liste-kart d-flex justify-content-between align-items-center">
             <div>
               <div class="fw-bold text-dark small">${item.musteri_adi ? item.musteri_adi + ' - ' : ''}${item.urun_adi || 'Başlıksız Ürün'}</div>
-              <div class="small text-muted" style="font-size:10px;">📅 ${item.tarih || '-'} | ⚙️ ${item.makina || '-'}</div>
+              <div class="small text-muted" style="font-size:10px;">📅 ${item.tarih || '-'}</div>
             </div>
             <div>
               <button onclick="raporDetayGoster(${item.id})" class="btn btn-sm btn-info text-white p-1 fw-bold">👁️</button>
@@ -502,7 +499,6 @@
       document.getElementById('tarih').value = rapor.tarih || '';
       document.getElementById('gram').value = rapor.gram || '';
       document.getElementById('renk').value = rapor.renk || '';
-      document.getElementById('makina').value = rapor.makina || '';
       
       document.getElementById('kesimEni').value = rapor.kesim_eni || '';
       document.getElementById('sarim').value = rapor.sarim || '';
