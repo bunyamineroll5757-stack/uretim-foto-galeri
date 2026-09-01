@@ -41,12 +41,16 @@
     .main-wrapper { max-width: 100%; padding: 6px; margin: 0 auto; display: none; }
     .rapor-kutu { 
       background: var(--card-bg); 
-      padding: 15px !important; 
+      padding: 20px !important; 
       border-radius: 10px; 
       box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
       width: 100% !important; 
       margin: 0 !important; 
       border: 1px solid #e2e8f0;
+      min-height: 96vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     
     .pdf-baslik { 
@@ -54,10 +58,10 @@
       font-weight: 800; 
       color: #ffffff; 
       background: linear-gradient(90deg, #1e293b 0%, #334155 100%);
-      padding: 12px; 
+      padding: 14px; 
       border-radius: 6px;
-      margin-bottom: 15px; 
-      font-size: 18px; 
+      margin-bottom: 20px; 
+      font-size: 20px; 
       letter-spacing: 1px;
       text-transform: uppercase; 
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -66,19 +70,17 @@
     .table-responsive { overflow-x: visible !important; }
     .uretim-tablo { table-layout: fixed; width: 100% !important; margin-bottom: 15px !important; border-collapse: separate; border-spacing: 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); }
     
-    /* BAŞLIKLAR DAHA OKUNAKLI YAPILDI */
-    .uretim-tablo th { background-color: var(--header-bg); color: #ffffff; font-weight: 700; font-size: 12px; text-align: center; padding: 8px 4px !important; word-wrap: break-word; border: 1px solid #334155; }
-    .uretim-tablo td { font-size: 13px; text-align: center; vertical-align: middle; padding: 4px !important; background-color: #fff; border: 1px solid #e2e8f0; }
+    .uretim-tablo th { background-color: var(--header-bg); color: #ffffff; font-weight: 700; font-size: 13px; text-align: center; padding: 10px 6px !important; word-wrap: break-word; border: 1px solid #334155; }
+    .uretim-tablo td { font-size: 14px; text-align: center; vertical-align: middle; padding: 6px !important; background-color: #fff; border: 1px solid #e2e8f0; }
     
-    /* INPUT VE TEXTAREA YAZILARI BÜYÜTÜLDÜ */
     .uretim-tablo input, .uretim-tablo textarea { 
-      font-size: 13px !important; 
+      font-size: 14px !important; 
       width: 100% !important; 
       text-align: center; 
       background-color: #f8fafc;
       border: 1px solid #cbd5e1 !important;
       border-radius: 4px;
-      padding: 6px 4px !important;
+      padding: 8px 6px !important;
       color: #0f172a !important;
       font-weight: 600;
       transition: all 0.2s ease;
@@ -95,12 +97,12 @@
       color: #ffffff !important;
       font-weight: 700; 
       text-align: left !important; 
-      padding-left: 10px !important; 
-      font-size: 13px !important; 
+      padding-left: 12px !important; 
+      font-size: 14px !important; 
       letter-spacing: 0.5px;
     }
     
-    .foto-liste { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
+    .foto-liste { display: flex; flex-direction: column; gap: 0px; }
     .foto-kart { 
       width: 100%; 
       text-align: center; 
@@ -109,23 +111,29 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 800px;
-      background: #f8fafc;
-      border-radius: 8px;
-      padding: 6px;
-      border: 1px solid #e2e8f0;
+      height: 98vh;
+      background: #ffffff;
+      padding: 0px;
+      margin: 0;
     }
-    .foto-kart img { width: 100%; max-height: 800px; border-radius: 6px; border: 1px solid #cbd5e1; object-fit: contain; }
-    .foto-sil-btn { position: absolute; top: 12px; right: 12px; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+    .foto-kart img { 
+      width: 100%; 
+      height: 100%; 
+      max-height: 96vh; 
+      object-fit: contain; 
+      border-radius: 4px; 
+      border: 1px solid #e2e8f0; 
+    }
+    .foto-sil-btn { position: absolute; top: 15px; right: 15px; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
     .liste-kart { background: #fff; border-radius: 8px; padding: 10px; margin-bottom: 8px; border-left: 5px solid var(--accent-color); box-shadow: 0 2px 6px rgba(0,0,0,0.04); border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
-    .notlar-alani { border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px; width: 100%; font-size: 13px; background-color: #f8fafc; color: #0f172a; resize: vertical; }
+    .notlar-alani { border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; width: 100%; font-size: 14px; background-color: #f8fafc; color: #0f172a; resize: vertical; }
     .notlar-alani:focus { background-color: #fff; border-color: var(--accent-color); outline: none; }
 
     @media print { 
       .no-print, .foto-sil-btn { display: none !important; } 
       body { background-color: #fff; padding: 0; } 
-      .rapor-kutu { box-shadow: none; padding: 0 !important; border: none; } 
-      .foto-kart { min-height: 90vh; background: none; border: none; }
+      .rapor-kutu { box-shadow: none; padding: 10px !important; border: none; height: 98vh; page-break-after: always; } 
+      .foto-kart { height: 98vh; background: none; border: none; }
     }
   </style>
 </head>
@@ -171,100 +179,102 @@
     </div>
 
     <div class="rapor-kutu" id="yazdirilacakAlan">
-      <div class="pdf-baslik">ÜRETİM AYARLARI FOTOĞRAFLARI</div>
+      <div>
+        <div class="pdf-baslik">ÜRETİM AYARLARI FOTOĞRAFLARI</div>
 
-      <div class="table-responsive">
-        <table class="table uretim-tablo">
-          <thead>
-            <tr>
-              <th style="width: 28%;">Müşteri Adı</th>
-              <th style="width: 28%;">Ürün Adı</th>
-              <th style="width: 18%;">Tarih</th>
-              <th style="width: 13%;">Gram</th>
-              <th style="width: 13%;">Renk</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><input type="text" id="musteriAdi" placeholder="Müşteri"></td>
-              <td><input type="text" id="urunAdi" placeholder="Ürün"></td>
-              <td><input type="date" id="tarih"></td>
-              <td><input type="text" id="gram" placeholder="Gram"></td>
-              <td><input type="text" id="renk" placeholder="Renk"></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table uretim-tablo">
+            <thead>
+              <tr>
+                <th style="width: 28%;">Müşteri Adı</th>
+                <th style="width: 28%;">Ürün Adı</th>
+                <th style="width: 18%;">Tarih</th>
+                <th style="width: 13%;">Gram</th>
+                <th style="width: 13%;">Renk</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text" id="musteriAdi" placeholder="Müşteri"></td>
+                <td><input type="text" id="urunAdi" placeholder="Ürün"></td>
+                <td><input type="date" id="tarih"></td>
+                <td><input type="text" id="gram" placeholder="Gram"></td>
+                <td><input type="text" id="renk" placeholder="Renk"></td>
+              </tr>
+            </tbody>
+          </table>
 
-        <!-- İKİNCİ TABLO: KESİM DETAY ALANI -->
-        <table class="table uretim-tablo">
-          <tbody>
-            <tr><td colspan="4" class="baslik-satiri">⚙️ KESİM DETAY</td></tr>
-            <tr>
-              <th style="width: 25%;">1. KESİM ENİ</th>
-              <th style="width: 25%;">2. SARIM</th>
-              <th style="width: 25%;">3. ÇAP</th>
-              <th style="width: 25%;">4. FIRIN ISI</th>
-            </tr>
-            <tr>
-              <td><input type="text" id="kesimEni" placeholder="Kesim eni..."></td>
-              <td><input type="text" id="sarim" placeholder="Sarım ayarları..."></td>
-              <td><input type="text" id="cap" placeholder="Rulo çap verisi..."></td>
-              <td><input type="text" id="firinIsi" placeholder="Fırın ısısı..."></td>
-            </tr>
-          </tbody>
-        </table>
+          <!-- KESİM DETAY ALANI -->
+          <table class="table uretim-tablo">
+            <tbody>
+              <tr><td colspan="4" class="baslik-satiri">⚙️ KESİM DETAY</td></tr>
+              <tr>
+                <th style="width: 25%;">1. KESİM ENİ</th>
+                <th style="width: 25%;">2. SARIM</th>
+                <th style="width: 25%;">3. ÇAP</th>
+                <th style="width: 25%;">4. FIRIN ISI</th>
+              </tr>
+              <tr>
+                <td><input type="text" id="kesimEni" placeholder="Kesim eni..."></td>
+                <td><input type="text" id="sarim" placeholder="Sarım ayarları..."></td>
+                <td><input type="text" id="cap" placeholder="Rulo çap verisi..."></td>
+                <td><input type="text" id="firinIsi" placeholder="Fırın ısısı..."></td>
+              </tr>
+            </tbody>
+          </table>
 
-        <table class="table uretim-tablo">
-          <tbody>
-            <tr><td colspan="4" class="baslik-satiri">🧪 HAMMADDE KARIŞIM ORANLARI (%)</td></tr>
-            <tr>
-              <th style="width: 25%;">Ham 1 (%)</th>
-              <th style="width: 25%;">Ham 2 (%)</th>
-              <th style="width: 25%;">Ham 3 (%)</th>
-              <th style="width: 25%;">Ham 4 (%)</th>
-            </tr>
-            <tr>
-              <td><input type="text" id="ham1" placeholder="%"></td>
-              <td><input type="text" id="ham2" placeholder="%"></td>
-              <td><input type="text" id="ham3" placeholder="%"></td>
-              <td><input type="text" id="ham4" placeholder="%"></td>
-            </tr>
-            <tr>
-              <td><input type="text" id="ham1_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
-              <td><input type="text" id="ham2_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
-              <td><input type="text" id="ham3_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
-              <td><input type="text" id="ham4_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
-            </tr>
+          <table class="table uretim-tablo">
+            <tbody>
+              <tr><td colspan="4" class="baslik-satiri">🧪 HAMMADDE KARIŞIM ORANLARI (%)</td></tr>
+              <tr>
+                <th style="width: 25%;">Ham 1 (%)</th>
+                <th style="width: 25%;">Ham 2 (%)</th>
+                <th style="width: 25%;">Ham 3 (%)</th>
+                <th style="width: 25%;">Ham 4 (%)</th>
+              </tr>
+              <tr>
+                <td><input type="text" id="ham1" placeholder="%"></td>
+                <td><input type="text" id="ham2" placeholder="%"></td>
+                <td><input type="text" id="ham3" placeholder="%"></td>
+                <td><input type="text" id="ham4" placeholder="%"></td>
+              </tr>
+              <tr>
+                <td><input type="text" id="ham1_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ham2_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ham3_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ham4_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+              </tr>
 
-            <tr><td colspan="4" class="baslik-satiri">🧫 İLAÇ KARIŞIM ORANLARI (%)</td></tr>
-            <tr>
-              <th style="width: 25%;">İlaç 1 (%)</th>
-              <th style="width: 25%;">İlaç 2 (%)</th>
-              <th style="width: 25%;">İlaç 3 (%)</th>
-              <th style="width: 25%;">İlaç 4 (%)</th>
-            </tr>
-            <tr>
-              <td><input type="text" id="ilac1" placeholder="%"></td>
-              <td><input type="text" id="ilac2" placeholder="%"></td>
-              <td><input type="text" id="ilac3" placeholder="%"></td>
-              <td><input type="text" id="ilac4" placeholder="%"></td>
-            </tr>
-            <tr>
-              <td><input type="text" id="ilac1_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
-              <td><input type="text" id="ilac2_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
-              <td><input type="text" id="ilac3_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
-              <td><input type="text" id="ilac4_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
-            </tr>
-          </tbody>
-        </table>
+              <tr><td colspan="4" class="baslik-satiri">🧫 İLAÇ KARIŞIM ORANLARI (%)</td></tr>
+              <tr>
+                <th style="width: 25%;">İlaç 1 (%)</th>
+                <th style="width: 25%;">İlaç 2 (%)</th>
+                <th style="width: 25%;">İlaç 3 (%)</th>
+                <th style="width: 25%;">İlaç 4 (%)</th>
+              </tr>
+              <tr>
+                <td><input type="text" id="ilac1" placeholder="%"></td>
+                <td><input type="text" id="ilac2" placeholder="%"></td>
+                <td><input type="text" id="ilac3" placeholder="%"></td>
+                <td><input type="text" id="ilac4" placeholder="%"></td>
+              </tr>
+              <tr>
+                <td><input type="text" id="ilac1_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ilac2_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ilac3_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ilac4_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mb-2">
+          <label for="notlar" class="fw-bold text-dark small mb-1">📝 RAPOR NOTLARI / AÇIKLAMA:</label>
+          <textarea id="notlar" class="form-control notlar-alani" rows="2" placeholder="Üretim veya süreçle ilgili notlarınızı yazınız..."></textarea>
+        </div>
       </div>
 
-      <div class="mb-3">
-        <label for="notlar" class="fw-bold text-dark small mb-1">📝 RAPOR NOTLARI / AÇIKLAMA:</label>
-        <textarea id="notlar" class="form-control notlar-alani" rows="3" placeholder="Üretim veya süreçle ilgili notlarınızı yazınız..."></textarea>
-      </div>
-
-      <div class="card border-2 border-dashed border-primary p-2 text-center mb-3 no-print bg-light" style="border-radius: 8px;">
+      <div class="card border-2 border-dashed border-primary p-2 text-center mb-2 no-print bg-light" style="border-radius: 8px;">
         <h6 class="fw-bold text-primary mb-1 small">📷 Fotoğraf Ekle (En fazla 10 Adet)</h6>
         <input type="file" id="fotoYukleInput" multiple accept="image/*" class="d-none" onchange="fotograflariIsle(this)">
         <div>
@@ -349,7 +359,7 @@
           let width = img.width;
           let height = img.height;
           
-          const max_size = 1200;
+          const max_size = 1400;
           if (width > height) {
             if (width > max_size) { height *= max_size / width; width = max_size; }
           } else {
@@ -361,7 +371,7 @@
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
           
-          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.75);
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
           callback(compressedBase64);
         };
         img.src = e.target.result;
@@ -573,7 +583,7 @@
       const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
       element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
       const opt = {
-        margin: [5, 5, 5, 5],
+        margin: [4, 4, 4, 4],
         filename: 'uretim_proses_raporu.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
@@ -586,7 +596,7 @@
       const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
       element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
       const opt = {
-        margin: [5, 5, 5, 5],
+        margin: [4, 4, 4, 4],
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
