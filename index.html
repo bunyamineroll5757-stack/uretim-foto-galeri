@@ -98,15 +98,15 @@
     
     .foto-liste { 
       display: flex; 
-      flex-direction: column; 
-      gap: 10px; 
+      flex-wrap: wrap; 
+      gap: 8px; 
       margin-top: 10px; 
       width: 100%; 
     }
     .foto-kart { 
-      width: 100% !important; 
-      max-width: 100% !important;
-      margin: 0 auto 5px auto;
+      width: 48% !important; 
+      flex: 0 0 48% !important;
+      margin: 0 auto 8px auto;
       text-align: center; 
       position: relative; 
       background: #ffffff;
@@ -118,7 +118,7 @@
     }
     .foto-kart img { 
       max-width: 100% !important;
-      max-height: 80mm !important;
+      max-height: 65mm !important;
       width: auto !important;
       height: auto !important;
       object-fit: contain !important;
@@ -126,7 +126,7 @@
       margin: 0 auto;
       border-radius: 4px;
     }
-    .foto-sil-btn { position: absolute; top: 8px; right: 8px; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+    .foto-sil-btn { position: absolute; top: 6px; right: 6px; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); font-size: 10px; padding: 2px 5px; }
     .liste-kart { background: #fff; border-radius: 8px; padding: 8px; margin-bottom: 6px; border-left: 5px solid var(--accent-color); box-shadow: 0 2px 6px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; }
     .notlar-alani { border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px; width: 100%; font-size: 12px; background-color: #f8fafc; color: #0f172a; resize: vertical; }
 
@@ -137,7 +137,6 @@
       .foto-kart {
         page-break-inside: avoid !important;
         break-inside: avoid !important;
-        max-height: 85mm !important;
       }
     }
   </style>
