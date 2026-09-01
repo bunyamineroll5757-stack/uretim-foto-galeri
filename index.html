@@ -102,29 +102,30 @@
       letter-spacing: 0.5px;
     }
     
-    .foto-liste { display: flex; flex-direction: column; gap: 0px; }
+    .foto-liste { display: flex; flex-direction: column; gap: 10px; }
     .foto-kart { 
       width: 100%; 
+      height: 297mm; /* Tam A4 yüksekliği */
+      box-sizing: border-box;
       text-align: center; 
       position: relative; 
       page-break-before: always; 
+      break-before: page;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 98vh;
       background: #ffffff;
-      padding: 0px;
+      padding: 10mm;
       margin: 0;
     }
     .foto-kart img { 
       width: 100%; 
       height: 100%; 
-      max-height: 96vh; 
-      object-fit: contain; 
+      object-fit: contain; /* Oranları bozulmadan sayfayı doldurur */
       border-radius: 4px; 
       border: 1px solid #e2e8f0; 
     }
-    .foto-sil-btn { position: absolute; top: 15px; right: 15px; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+    .foto-sil-btn { position: absolute; top: 20px; right: 20px; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
     .liste-kart { background: #fff; border-radius: 8px; padding: 10px; margin-bottom: 8px; border-left: 5px solid var(--accent-color); box-shadow: 0 2px 6px rgba(0,0,0,0.04); border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
     .notlar-alani { border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px; width: 100%; font-size: 13px; background-color: #f8fafc; color: #0f172a; resize: vertical; }
     .notlar-alani:focus { background-color: #fff; border-color: var(--accent-color); outline: none; }
@@ -132,8 +133,8 @@
     @media print { 
       .no-print, .foto-sil-btn { display: none !important; } 
       body { background-color: #fff; padding: 0; } 
-      .rapor-kutu { box-shadow: none; padding: 10px !important; border: none; height: 98vh; page-break-after: always; } 
-      .foto-kart { height: 98vh; background: none; border: none; }
+      .rapor-kutu { box-shadow: none; padding: 10px !important; border: none; height: 100vh; page-break-after: always; } 
+      .foto-kart { height: 100vh; page-break-before: always; break-before: page; background: none; border: none; padding: 0; }
     }
   </style>
 </head>
@@ -170,6 +171,7 @@
         </div>
       </div>
 
+      <!-- AKORDEON SEKME (REÇETE / RAPOR ARAMA) -->
       <div class="accordion mb-2 shadow-sm" id="accordionRaporlar">
         <div class="accordion-item border-0" style="border-radius: 8px; overflow: hidden;">
           <h2 class="accordion-header" id="headingRaporlar">
@@ -218,6 +220,7 @@
             </tbody>
           </table>
 
+          <!-- KESİM DETAY ALANI -->
           <table class="table uretim-tablo">
             <tbody>
               <tr><td colspan="4" class="baslik-satiri">⚙️ KESİM DETAY</td></tr>
@@ -373,7 +376,7 @@
           let width = img.width;
           let height = img.height;
           
-          const max_size = 1400;
+          const max_size = 1600;
           if (width > height) {
             if (width > max_size) { height *= max_size / width; width = max_size; }
           } else {
@@ -385,7 +388,7 @@
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
           
-          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.90);
           callback(compressedBase64);
         };
         img.src = e.target.result;
@@ -617,7 +620,7 @@
       const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
       element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
       const opt = {
-        margin: [4, 4, 4, 4],
+        margin: 0,
         filename: 'uretim_proses_raporu.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
@@ -630,7 +633,7 @@
       const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
       element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
       const opt = {
-        margin: [4, 4, 4, 4],
+        margin: 0,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
