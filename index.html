@@ -18,10 +18,10 @@
     /* Tabloyu Mobilde Ekrana Tam Sığdırma */
     .table-responsive { overflow-x: visible !important; }
     .uretim-tablo { table-layout: fixed; width: 100% !important; margin-bottom: 10px !important; }
-    .uretim-tablo th { background-color: #e2e8f0; color: #0f172a; font-weight: bold; font-size: 11px; text-align: center; padding: 4px 1px !important; word-wrap: break-word; }
-    .uretim-tablo td { font-size: 11px; text-align: center; vertical-align: middle; padding: 2px 1px !important; }
-    .uretim-tablo input { font-size: 11px !important; width: 100% !important; text-align: center; }
-    .baslik-satiri { background-color: #cbd5e1 !important; font-weight: bold; text-align: left !important; padding-left: 5px !important; font-size: 11px !important; }
+    .uretim-tablo th { background-color: #e2e8f0; color: #0f172a; font-weight: bold; font-size: 10px; text-align: center; padding: 4px 1px !important; word-wrap: break-word; }
+    .uretim-tablo td { font-size: 10px; text-align: center; vertical-align: middle; padding: 2px 1px !important; }
+    .uretim-tablo input { font-size: 10px !important; width: 100% !important; text-align: center; }
+    .baslik-satiri { background-color: #cbd5e1 !important; font-weight: bold; text-align: left !important; padding-left: 5px !important; font-size: 10px !important; }
     
     /* Fotoğraf Galerisi & PDF Düzeni */
     .foto-liste { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
@@ -53,7 +53,8 @@
   <div class="main-wrapper">
     <div class="container-fluid mb-2 no-print p-1">
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <a href="https://757-stack.github.io/uretim-recete/" class="btn btn-outline-secondary btn-sm px-2">← Ana Sistem</a>
+        <!-- Ana sistem linki düzeltildi -->
+        <a href="./index.html" class="btn btn-outline-secondary btn-sm px-2">← Ana Sistem</a>
         <div>
           <button onclick="formuTemizle()" class="btn btn-outline-primary btn-sm me-1 px-2">➕ Yeni</button>
           <button onclick="veriyiKaydet()" class="btn btn-success btn-sm px-2" id="btnKaydet">💾 Kaydet</button>
@@ -75,15 +76,17 @@
         <table class="table table-bordered uretim-tablo">
           <thead>
             <tr>
-              <th style="width: 25%;">Ürün Adı</th>
-              <th style="width: 23%;">Tarih</th>
-              <th style="width: 17%;">Gram</th>
-              <th style="width: 17%;">Renk</th>
-              <th style="width: 18%;">Makina</th>
+              <th style="width: 22%;">Müşteri Adı</th>
+              <th style="width: 22%;">Ürün Adı</th>
+              <th style="width: 20%;">Tarih</th>
+              <th style="width: 12%;">Gram</th>
+              <th style="width: 12%;">Renk</th>
+              <th style="width: 12%;">Makina</th>
             </tr>
           </thead>
           <tbody>
             <tr>
+              <td><input type="text" class="form-control border-0 p-0 text-primary fw-bold" id="musteriAdi" placeholder="Müşteri Adı"></td>
               <td><input type="text" class="form-control border-0 p-0 fw-bold" id="urunAdi" placeholder="Ürün Adı"></td>
               <td><input type="date" class="form-control border-0 p-0" id="tarih"></td>
               <td><input type="text" class="form-control border-0 p-0" id="gram" placeholder="Gram"></td>
@@ -91,43 +94,43 @@
               <td><input type="text" class="form-control border-0 p-0" id="makina" placeholder="Makina"></td>
             </tr>
 
-            <tr><td colspan="5" class="baslik-satiri">HAMMADDE KARIŞIM ORANLARI (%)</td></tr>
+            <tr><td colspan="6" class="baslik-satiri">HAMMADDE KARIŞIM ORANLARI (%)</td></tr>
             <tr>
-              <th style="width: 25%;">Ham 1 (%)</th>
-              <th style="width: 25%;">Ham 2 (%)</th>
-              <th style="width: 25%;">Ham 3 (%)</th>
-              <th colspan="2" style="width: 25%;">Ham 4 (%)</th>
+              <th colspan="1" style="width: 22%;">Ham 1 (%)</th>
+              <th colspan="1" style="width: 22%;">Ham 2 (%)</th>
+              <th colspan="2" style="width: 32%;">Ham 3 (%)</th>
+              <th colspan="2" style="width: 24%;">Ham 4 (%)</th>
             </tr>
             <tr>
-              <td><input type="text" class="form-control border-0 p-0" id="ham1" placeholder="%"></td>
-              <td><input type="text" class="form-control border-0 p-0" id="ham2" placeholder="%"></td>
-              <td><input type="text" class="form-control border-0 p-0" id="ham3" placeholder="%"></td>
+              <td colspan="1"><input type="text" class="form-control border-0 p-0" id="ham1" placeholder="%"></td>
+              <td colspan="1"><input type="text" class="form-control border-0 p-0" id="ham2" placeholder="%"></td>
+              <td colspan="2"><input type="text" class="form-control border-0 p-0" id="ham3" placeholder="%"></td>
               <td colspan="2"><input type="text" class="form-control border-0 p-0" id="ham4" placeholder="%"></td>
             </tr>
             <tr>
-              <td><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ham1_kod" placeholder="Kod/Ad"></td>
-              <td><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ham2_kod" placeholder="Kod/Ad"></td>
-              <td><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ham3_kod" placeholder="Kod/Ad"></td>
+              <td colspan="1"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ham1_kod" placeholder="Kod/Ad"></td>
+              <td colspan="1"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ham2_kod" placeholder="Kod/Ad"></td>
+              <td colspan="2"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ham3_kod" placeholder="Kod/Ad"></td>
               <td colspan="2"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ham4_kod" placeholder="Kod/Ad"></td>
             </tr>
 
-            <tr><td colspan="5" class="baslik-satiri">İLAÇ KARIŞIM ORANLARI (%)</td></tr>
+            <tr><td colspan="6" class="baslik-satiri">İLAÇ KARIŞIM ORANLARI (%)</td></tr>
             <tr>
-              <th style="width: 25%;">İlaç 1 (%)</th>
-              <th style="width: 25%;">İlaç 2 (%)</th>
-              <th style="width: 25%;">İlaç 3 (%)</th>
-              <th colspan="2" style="width: 25%;">İlaç 4 (%)</th>
+              <th colspan="1" style="width: 22%;">İlaç 1 (%)</th>
+              <th colspan="1" style="width: 22%;">İlaç 2 (%)</th>
+              <th colspan="2" style="width: 32%;">İlaç 3 (%)</th>
+              <th colspan="2" style="width: 24%;">İlaç 4 (%)</th>
             </tr>
             <tr>
-              <td><input type="text" class="form-control border-0 p-0" id="ilac1" placeholder="%"></td>
-              <td><input type="text" class="form-control border-0 p-0" id="ilac2" placeholder="%"></td>
-              <td><input type="text" class="form-control border-0 p-0" id="ilac3" placeholder="%"></td>
+              <td colspan="1"><input type="text" class="form-control border-0 p-0" id="ilac1" placeholder="%"></td>
+              <td colspan="1"><input type="text" class="form-control border-0 p-0" id="ilac2" placeholder="%"></td>
+              <td colspan="2"><input type="text" class="form-control border-0 p-0" id="ilac3" placeholder="%"></td>
               <td colspan="2"><input type="text" class="form-control border-0 p-0" id="ilac4" placeholder="%"></td>
             </tr>
             <tr>
-              <td><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ilac1_kod" placeholder="Kod/Ad"></td>
-              <td><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ilac2_kod" placeholder="Kod/Ad"></td>
-              <td><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ilac3_kod" placeholder="Kod/Ad"></td>
+              <td colspan="1"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ilac1_kod" placeholder="Kod/Ad"></td>
+              <td colspan="1"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ilac2_kod" placeholder="Kod/Ad"></td>
+              <td colspan="2"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ilac3_kod" placeholder="Kod/Ad"></td>
               <td colspan="2"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ilac4_kod" placeholder="Kod/Ad"></td>
             </tr>
           </tbody>
@@ -265,6 +268,7 @@
       btn.disabled = true;
 
       const payload = {
+        musteri_adi: document.getElementById('musteriAdi').value,
         urun_adi: document.getElementById('urunAdi').value,
         tarih: document.getElementById('tarih').value,
         gram: document.getElementById('gram').value,
@@ -321,7 +325,7 @@
         col.innerHTML = `
           <div class="liste-kart d-flex justify-content-between align-items-center">
             <div>
-              <div class="fw-bold text-dark small">${item.urun_adi || 'Başlıksız Ürün'}</div>
+              <div class="fw-bold text-dark small">${item.musteri_adi ? item.musteri_adi + ' - ' : ''}${item.urun_adi || 'Başlıksız Ürün'}</div>
               <div class="small text-muted" style="font-size:10px;">📅 ${item.tarih || '-'} | ⚙️ ${item.makina || '-'}</div>
             </div>
             <div>
@@ -342,6 +346,7 @@
       aktifRaporId = rapor.id;
       document.getElementById('btnKaydet').innerText = "🔄 Güncelle";
 
+      document.getElementById('musteriAdi').value = rapor.musteri_adi || '';
       document.getElementById('urunAdi').value = rapor.urun_adi || '';
       document.getElementById('tarih').value = rapor.tarih || '';
       document.getElementById('gram').value = rapor.gram || '';
