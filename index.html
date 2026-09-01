@@ -3,18 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Üretim Fotoğraf Galerisi</title>
+  <title>Üretim Fotoğraf Galerisi ve Raporlama</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    body { background-color: #f4f6f9; font-family: Arial, sans-serif; padding: 0 !important; margin: 0 !important; }
+    :root {
+      --primary-color: #0f172a;
+      --accent-color: #2563eb;
+      --bg-color: #f1f5f9;
+      --card-bg: #ffffff;
+      --header-bg: #1e293b;
+      --border-color: #cbd5e1;
+    }
+
+    body { background-color: var(--bg-color); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 0 !important; margin: 0 !important; color: #334155; }
     
-    /* Login Ekranı Stilleri */
     #loginEkran {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: #1e293b;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       z-index: 9999;
       display: flex;
       justify-content: center;
@@ -22,28 +30,73 @@
       padding: 15px;
     }
     .login-kutu {
-      background: #fff;
-      padding: 25px;
-      border-radius: 10px;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
       width: 100%;
-      max-width: 360px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      max-width: 380px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
 
-    /* Mobil Kenar Boşluklarını Sıfırlama */
-    .main-wrapper { max-width: 100%; padding: 4px; margin: 0 auto; display: none; }
-    .rapor-kutu { background: #fff; padding: 8px !important; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); width: 100% !important; margin: 0 !important; }
-    .pdf-baslik { text-align: center; font-weight: bold; color: #1e293b; border-bottom: 2px solid #0d6efd; padding-bottom: 6px; margin-bottom: 12px; font-size: 18px; text-transform: uppercase; }
+    .main-wrapper { max-width: 100%; padding: 6px; margin: 0 auto; display: none; }
+    .rapor-kutu { 
+      background: var(--card-bg); 
+      padding: 12px !important; 
+      border-radius: 10px; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+      width: 100% !important; 
+      margin: 0 !important; 
+      border: 1px solid #e2e8f0;
+    }
     
-    /* Tabloyu Mobilde Ekrana Tam Sığdırma */
+    .pdf-baslik { 
+      text-align: center; 
+      font-weight: 800; 
+      color: #ffffff; 
+      background: linear-gradient(90deg, #1e293b 0%, #334155 100%);
+      padding: 10px; 
+      border-radius: 6px;
+      margin-bottom: 12px; 
+      font-size: 16px; 
+      letter-spacing: 1px;
+      text-transform: uppercase; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
     .table-responsive { overflow-x: visible !important; }
-    .uretim-tablo { table-layout: fixed; width: 100% !important; margin-bottom: 10px !important; }
-    .uretim-tablo th { background-color: #e2e8f0; color: #0f172a; font-weight: bold; font-size: 10px; text-align: center; padding: 4px 1px !important; word-wrap: break-word; }
-    .uretim-tablo td { font-size: 10px; text-align: center; vertical-align: middle; padding: 2px 1px !important; }
-    .uretim-tablo input { font-size: 10px !important; width: 100% !important; text-align: center; }
-    .baslik-satiri { background-color: #cbd5e1 !important; font-weight: bold; text-align: left !important; padding-left: 5px !important; font-size: 10px !important; }
+    .uretim-tablo { table-layout: fixed; width: 100% !important; margin-bottom: 12px !important; border-collapse: separate; border-spacing: 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); }
+    .uretim-tablo th { background-color: var(--header-bg); color: #ffffff; font-weight: 600; font-size: 9px; text-align: center; padding: 6px 2px !important; word-wrap: break-word; border: 1px solid #334155; }
+    .uretim-tablo td { font-size: 10px; text-align: center; vertical-align: middle; padding: 2px !important; background-color: #fff; border: 1px solid #e2e8f0; }
     
-    /* Fotoğraf Galerisi & PDF Düzeni */
+    .uretim-tablo input, .uretim-tablo textarea { 
+      font-size: 10px !important; 
+      width: 100% !important; 
+      text-align: center; 
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 4px;
+      padding: 4px 2px !important;
+      color: #0f172a !important;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .uretim-tablo input:focus, .uretim-tablo textarea:focus {
+      background-color: #ffffff !important;
+      border-color: var(--accent-color) !important;
+      outline: none;
+      box-shadow: 0 0 4px rgba(37, 99, 235, 0.4);
+    }
+    
+    .baslik-satiri { 
+      background: linear-gradient(90deg, #0f172a 0%, #2563eb 100%) !important; 
+      color: #ffffff !important;
+      font-weight: 700; 
+      text-align: left !important; 
+      padding-left: 8px !important; 
+      font-size: 10px !important; 
+      letter-spacing: 0.5px;
+    }
+    
     .foto-liste { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
     .foto-kart { 
       width: 100%; 
@@ -54,55 +107,60 @@
       justify-content: center;
       align-items: center;
       min-height: 800px;
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 6px;
+      border: 1px solid #e2e8f0;
     }
     .foto-kart img { width: 100%; max-height: 800px; border-radius: 6px; border: 1px solid #cbd5e1; object-fit: contain; }
-    .foto-sil-btn { position: absolute; top: 8px; right: 8px; z-index: 10; }
-    .liste-kart { background: #fff; border-radius: 6px; padding: 10px; margin-bottom: 8px; border-left: 4px solid #0d6efd; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .notlar-alani { border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px; width: 100%; font-size: 13px; resize: vertical; }
+    .foto-sil-btn { position: absolute; top: 12px; right: 12px; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+    .liste-kart { background: #fff; border-radius: 8px; padding: 10px; margin-bottom: 8px; border-left: 5px solid var(--accent-color); box-shadow: 0 2px 6px rgba(0,0,0,0.04); border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
+    .notlar-alani { border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px; width: 100%; font-size: 12px; background-color: #f8fafc; color: #0f172a; resize: vertical; }
+    .notlar-alani:focus { background-color: #fff; border-color: var(--accent-color); outline: none; }
 
     @media print { 
       .no-print, .foto-sil-btn { display: none !important; } 
       body { background-color: #fff; padding: 0; } 
-      .rapor-kutu { box-shadow: none; padding: 0 !important; } 
-      .foto-kart { min-height: 90vh; }
+      .rapor-kutu { box-shadow: none; padding: 0 !important; border: none; } 
+      .foto-kart { min-height: 90vh; background: none; border: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- KULLANICI GİRİŞ EKRANI -->
   <div id="loginEkran">
-    <div class="login-kutu">
-      <h5 class="fw-bold text-center text-primary mb-3">🔒 Sistem Girişi</h5>
+    <div class="login-kutu text-center">
+      <div class="mb-3"><span style="font-size: 36px;">⚙️</span></div>
+      <h5 class="fw-bold text-dark mb-1">Üretim Portalına Giriş</h5>
+      <p class="text-muted small mb-4">Lütfen kullanıcı bilgilerinizi giriniz</p>
       <form onsubmit="girisYap(event)">
-        <div class="mb-2">
-          <label class="form-label small fw-bold">Kullanıcı Adı</label>
-          <input type="text" id="loginKullanici" class="form-control form-control-sm" required placeholder="Kullanıcı adı">
+        <div class="mb-3 text-start">
+          <label class="form-label small fw-bold text-secondary">Kullanıcı Adı</label>
+          <input type="text" id="loginKullanici" class="form-control" required placeholder="Kullanıcı adı">
         </div>
-        <div class="mb-3">
-          <label class="form-label small fw-bold">Şifre</label>
-          <input type="password" id="loginSifre" class="form-control form-control-sm" required placeholder="Şifre">
+        <div class="mb-3 text-start">
+          <label class="form-label small fw-bold text-secondary">Şifre</label>
+          <input type="password" id="loginSifre" class="form-control" required placeholder="Şifre">
         </div>
-        <div id="loginHata" class="text-danger small mb-2 d-none">Hatalı kullanıcı adı veya şifre!</div>
-        <button type="submit" class="btn btn-primary btn-sm w-100 fw-bold">Giriş Yap</button>
+        <div id="loginHata" class="text-danger small mb-3 d-none fw-bold">⚠️ Hatalı kullanıcı adı veya şifre!</div>
+        <button type="submit" class="btn btn-primary w-100 fw-bold py-2 shadow-sm" style="background-color: var(--accent-color);">Giriş Yap</button>
       </form>
     </div>
   </div>
 
-  <!-- ANA UYGULAMA İÇERİĞİ -->
   <div class="main-wrapper" id="anaUygulama">
     <div class="container-fluid mb-2 no-print p-1">
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <a href="./index.html" class="btn btn-outline-secondary btn-sm px-2">← Ana Sistem</a>
+        <a href="./index.html" class="btn btn-outline-dark btn-sm px-2 fw-bold">← Ana Sistem</a>
         <div>
-          <button onclick="formuTemizle()" class="btn btn-outline-primary btn-sm me-1 px-2">➕ Yeni</button>
-          <button onclick="veriyiKaydet()" class="btn btn-success btn-sm me-1 px-2" id="btnKaydet">💾 Kaydet</button>
-          <button onclick="cikisYap()" class="btn btn-outline-danger btn-sm px-2">🚪 Çıkış</button>
+          <button onclick="formuTemizle()" class="btn btn-outline-primary btn-sm me-1 px-2 fw-bold">➕ Yeni</button>
+          <button onclick="veriyiKaydet()" class="btn btn-success btn-sm me-1 px-2 fw-bold" id="btnKaydet">💾 Kaydet</button>
+          <button onclick="cikisYap()" class="btn btn-outline-danger btn-sm px-2 fw-bold">🚪 Çıkış</button>
         </div>
       </div>
 
-      <div class="card p-2 border-0 shadow-sm mb-2">
-        <h6 class="fw-bold text-primary mb-2 style-title">📋 Kayıtlı Galeri Raporları</h6>
+      <div class="card p-2 border-0 shadow-sm mb-2" style="border-radius: 8px;">
+        <h6 class="fw-bold text-dark mb-2">📋 Kayıtlı Galeri Raporları</h6>
         <div id="raporListesiAlani" class="row g-2">
           <div class="text-secondary small text-center">Raporlar yükleniyor...</div>
         </div>
@@ -110,84 +168,106 @@
     </div>
 
     <div class="rapor-kutu" id="yazdirilacakAlan">
-      <h3 class="pdf-baslik">ÜRETİM FOTOĞRAFLARI RAPORU</h3>
+      <div class="pdf-baslik">ÜRETİM FOTOĞRAFLARI VE PROSES RAPORU</div>
 
       <div class="table-responsive">
-        <table class="table table-bordered uretim-tablo">
+        <table class="table uretim-tablo">
           <thead>
             <tr>
-              <th style="width: 22%;">Müşteri Adı</th>
-              <th style="width: 22%;">Ürün Adı</th>
-              <th style="width: 20%;">Tarih</th>
-              <th style="width: 12%;">Gram</th>
-              <th style="width: 12%;">Renk</th>
+              <th style="width: 25%;">Müşteri Adı</th>
+              <th style="width: 25%;">Ürün Adı</th>
+              <th style="width: 16%;">Tarih</th>
+              <th style="width: 11%;">Gram</th>
+              <th style="width: 11%;">Renk</th>
               <th style="width: 12%;">Makina</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><input type="text" class="form-control border-0 p-0 text-primary fw-bold" id="musteriAdi" placeholder="Müşteri Adı"></td>
-              <td><input type="text" class="form-control border-0 p-0 fw-bold" id="urunAdi" placeholder="Ürün Adı"></td>
-              <td><input type="date" class="form-control border-0 p-0" id="tarih"></td>
-              <td><input type="text" class="form-control border-0 p-0" id="gram" placeholder="Gram"></td>
-              <td><input type="text" class="form-control border-0 p-0" id="renk" placeholder="Renk"></td>
-              <td><input type="text" class="form-control border-0 p-0" id="makina" placeholder="Makina"></td>
+              <td><input type="text" id="musteriAdi" placeholder="Müşteri"></td>
+              <td><input type="text" id="urunAdi" placeholder="Ürün"></td>
+              <td><input type="date" id="tarih"></td>
+              <td><input type="text" id="gram" placeholder="Gram"></td>
+              <td><input type="text" id="renk" placeholder="Renk"></td>
+              <td><input type="text" id="makina" placeholder="Makina"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- İKİNCİ TABLO: 4 AYRI PROSES ALANI -->
+        <table class="table uretim-tablo">
+          <tbody>
+            <tr><td colspan="4" class="baslik-satiri">⚙️ MAKİNE VE ÜRETİM PROSES PARAMETRELERİ</td></tr>
+            <tr>
+              <th style="width: 25%;">1. KESİM ENİ</th>
+              <th style="width: 25%;">2. SARIM</th>
+              <th style="width: 25%;">3. ÇAP</th>
+              <th style="width: 25%;">4. FIRIN ISI</th>
+            </tr>
+            <tr>
+              <td><textarea id="kesimEni" rows="3" placeholder="Kesim eni parametresi..."></textarea></td>
+              <td><textarea id="sarim" rows="3" placeholder="Sarım ayarları..."></textarea></td>
+              <td><textarea id="cap" rows="3" placeholder="Rulo çap verisi..."></textarea></td>
+              <td><textarea id="firinIsi" rows="3" placeholder="Fırın ısısı zonlar..."></textarea></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="table uretim-tablo">
+          <tbody>
+            <tr><td colspan="4" class="baslik-satiri">🧪 HAMMADDE KARIŞIM ORANLARI (%)</td></tr>
+            <tr>
+              <th style="width: 25%;">Ham 1 (%)</th>
+              <th style="width: 25%;">Ham 2 (%)</th>
+              <th style="width: 25%;">Ham 3 (%)</th>
+              <th style="width: 25%;">Ham 4 (%)</th>
+            </tr>
+            <tr>
+              <td><input type="text" id="ham1" placeholder="%"></td>
+              <td><input type="text" id="ham2" placeholder="%"></td>
+              <td><input type="text" id="ham3" placeholder="%"></td>
+              <td><input type="text" id="ham4" placeholder="%"></td>
+            </tr>
+            <tr>
+              <td><input type="text" id="ham1_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+              <td><input type="text" id="ham2_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+              <td><input type="text" id="ham3_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+              <td><input type="text" id="ham4_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
             </tr>
 
-            <tr><td colspan="6" class="baslik-satiri">HAMMADDE KARIŞIM ORANLARI (%)</td></tr>
+            <tr><td colspan="4" class="baslik-satiri">🧫 İLAÇ KARIŞIM ORANLARI (%)</td></tr>
             <tr>
-              <th colspan="1" style="width: 22%;">Ham 1 (%)</th>
-              <th colspan="1" style="width: 22%;">Ham 2 (%)</th>
-              <th colspan="2" style="width: 32%;">Ham 3 (%)</th>
-              <th colspan="2" style="width: 24%;">Ham 4 (%)</th>
+              <th style="width: 25%;">İlaç 1 (%)</th>
+              <th style="width: 25%;">İlaç 2 (%)</th>
+              <th style="width: 25%;">İlaç 3 (%)</th>
+              <th style="width: 25%;">İlaç 4 (%)</th>
             </tr>
             <tr>
-              <td colspan="1"><input type="text" class="form-control border-0 p-0" id="ham1" placeholder="%"></td>
-              <td colspan="1"><input type="text" class="form-control border-0 p-0" id="ham2" placeholder="%"></td>
-              <td colspan="2"><input type="text" class="form-control border-0 p-0" id="ham3" placeholder="%"></td>
-              <td colspan="2"><input type="text" class="form-control border-0 p-0" id="ham4" placeholder="%"></td>
+              <td><input type="text" id="ilac1" placeholder="%"></td>
+              <td><input type="text" id="ilac2" placeholder="%"></td>
+              <td><input type="text" id="ilac3" placeholder="%"></td>
+              <td><input type="text" id="ilac4" placeholder="%"></td>
             </tr>
             <tr>
-              <td colspan="1"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ham1_kod" placeholder="Kod/Ad"></td>
-              <td colspan="1"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ham2_kod" placeholder="Kod/Ad"></td>
-              <td colspan="2"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ham3_kod" placeholder="Kod/Ad"></td>
-              <td colspan="2"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ham4_kod" placeholder="Kod/Ad"></td>
-            </tr>
-
-            <tr><td colspan="6" class="baslik-satiri">İLAÇ KARIŞIM ORANLARI (%)</td></tr>
-            <tr>
-              <th colspan="1" style="width: 22%;">İlaç 1 (%)</th>
-              <th colspan="1" style="width: 22%;">İlaç 2 (%)</th>
-              <th colspan="2" style="width: 32%;">İlaç 3 (%)</th>
-              <th colspan="2" style="width: 24%;">İlaç 4 (%)</th>
-            </tr>
-            <tr>
-              <td colspan="1"><input type="text" class="form-control border-0 p-0" id="ilac1" placeholder="%"></td>
-              <td colspan="1"><input type="text" class="form-control border-0 p-0" id="ilac2" placeholder="%"></td>
-              <td colspan="2"><input type="text" class="form-control border-0 p-0" id="ilac3" placeholder="%"></td>
-              <td colspan="2"><input type="text" class="form-control border-0 p-0" id="ilac4" placeholder="%"></td>
-            </tr>
-            <tr>
-              <td colspan="1"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ilac1_kod" placeholder="Kod/Ad"></td>
-              <td colspan="1"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ilac2_kod" placeholder="Kod/Ad"></td>
-              <td colspan="2"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ilac3_kod" placeholder="Kod/Ad"></td>
-              <td colspan="2"><input type="text" class="form-control border-0 p-0 text-secondary fst-italic" id="ilac4_kod" placeholder="Kod/Ad"></td>
+              <td><input type="text" id="ilac1_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+              <td><input type="text" id="ilac2_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+              <td><input type="text" id="ilac3_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+              <td><input type="text" id="ilac4_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- NOTLAR ALANI -->
       <div class="mb-3">
         <label for="notlar" class="fw-bold text-dark small mb-1">📝 RAPOR NOTLARI / AÇIKLAMA:</label>
-        <textarea id="notlar" class="form-control notlar-alani" rows="4" placeholder="Üretim veya süreçle ilgili notlarınızı yazınız..."></textarea>
+        <textarea id="notlar" class="form-control notlar-alani" rows="3" placeholder="Üretim veya süreçle ilgili notlarınızı yazınız..."></textarea>
       </div>
 
-      <div class="card border-2 border-dashed border-primary p-2 text-center mb-3 no-print bg-light">
+      <div class="card border-2 border-dashed border-primary p-2 text-center mb-3 no-print bg-light" style="border-radius: 8px;">
         <h6 class="fw-bold text-primary mb-1 small">📷 Fotoğraf Ekle (En fazla 10 Adet)</h6>
         <input type="file" id="fotoYukleInput" multiple accept="image/*" class="d-none" onchange="fotograflariIsle(this)">
         <div>
-          <label for="fotoYukleInput" class="btn btn-primary btn-sm px-3 py-1">Fotoğraf Seç</label>
+          <label for="fotoYukleInput" class="btn btn-primary btn-sm px-3 py-1 fw-bold shadow-sm" style="background-color: var(--accent-color);">Fotoğraf Seç</label>
           <span class="ms-2 fw-bold text-secondary small" id="fotoSayac">(0 / 10)</span>
         </div>
       </div>
@@ -196,21 +276,20 @@
     </div>
   </div>
 
-  <!-- DETAY MODAL -->
   <div class="modal fade" id="detayModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header bg-dark text-white">
           <h5 class="modal-title fw-bold">Rapor Detayı & İşlemler</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
         </div>
         <div class="modal-body p-1" id="detayModalIcerik"></div>
         <div class="modal-footer d-flex justify-content-between">
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Kapat</button>
+          <button type="button" class="btn btn-secondary btn-sm fw-bold" data-bs-dismiss="modal">Kapat</button>
           <div>
-            <button onclick="pdfPaylas()" class="btn btn-success btn-sm me-1">💬 WhatsApp / Paylaş</button>
-            <button onclick="window.print()" class="btn btn-dark btn-sm me-1">🖨️ Yazdır</button>
-            <button onclick="pdfIndir()" class="btn btn-danger btn-sm">📄 PDF İndir</button>
+            <button onclick="pdfPaylas()" class="btn btn-success btn-sm me-1 fw-bold">💬 WhatsApp / Paylaş</button>
+            <button onclick="window.print()" class="btn btn-dark btn-sm me-1 fw-bold">🖨️ Yazdır</button>
+            <button onclick="pdfIndir()" class="btn btn-danger btn-sm fw-bold">📄 PDF İndir</button>
           </div>
         </div>
       </div>
@@ -219,7 +298,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // KULLANICI GİRİŞ BİLGİLERİ (İstediğiniz gibi değiştirebilirsiniz)
     const SABIT_KULLANICI = "bunyamin";
     const SABIT_SIFRE = "Busra.5744";
 
@@ -233,7 +311,6 @@
     let aktifRaporId = null;
 
     window.onload = function() { 
-      // Oturum kontrolü
       if (localStorage.getItem('uretim_oturum') === 'acik') {
         document.getElementById('loginEkran').style.display = 'none';
         document.getElementById('anaUygulama').style.display = 'block';
@@ -344,6 +421,10 @@
         gram: document.getElementById('gram').value,
         renk: document.getElementById('renk').value,
         makina: document.getElementById('makina').value,
+        kesim_eni: document.getElementById('kesimEni').value,
+        sarim: document.getElementById('sarim').value,
+        cap: document.getElementById('cap').value,
+        firin_isi: document.getElementById('firinIsi').value,
         ham1: document.getElementById('ham1').value, ham2: document.getElementById('ham2').value,
         ham3: document.getElementById('ham3').value, ham4: document.getElementById('ham4').value,
         ham1_kod: document.getElementById('ham1_kod').value, ham2_kod: document.getElementById('ham2_kod').value,
@@ -358,169 +439,4 @@
 
       try {
         if (aktifRaporId) {
-          const { error } = await _supabase.from('uretim_fotogaleri').update(payload).eq('id', aktifRaporId);
-          if (error) throw error;
-          alert("Rapor güncellendi!");
-        } else {
-          const { error } = await _supabase.from('uretim_fotogaleri').insert([payload]);
-          if (error) throw error;
-          alert("Yeni rapor kaydedildi!");
-        }
-        formuTemizle();
-        kayitliRaporlariListele();
-      } catch (err) {
-        alert("Kayıt Hatası: " + err.message);
-      } finally {
-        btn.innerText = "💾 Kaydet";
-        btn.disabled = false;
-      }
-    }
-
-    async function kayitliRaporlariListele() {
-      const alan = document.getElementById('raporListesiAlani');
-      alan.innerHTML = '<div class="text-secondary small text-center">Yükleniyor...</div>';
-
-      const { data, error } = await _supabase.from('uretim_fotogaleri').select('*').order('id', { ascending: false });
-      if (error || !data || data.length === 0) {
-        alan.innerHTML = '<div class="text-secondary small text-center">Kayıtlı rapor bulunmuyor.</div>';
-        return;
-      }
-
-      window.tumRaporlar = data;
-      alan.innerHTML = "";
-
-      data.forEach(item => {
-        const col = document.createElement('div');
-        col.className = 'col-12 col-md-6 col-lg-4';
-        col.innerHTML = `
-          <div class="liste-kart d-flex justify-content-between align-items-center">
-            <div>
-              <div class="fw-bold text-dark small">${item.musteri_adi ? item.musteri_adi + ' - ' : ''}${item.urun_adi || 'Başlıksız Ürün'}</div>
-              <div class="small text-muted" style="font-size:10px;">📅 ${item.tarih || '-'} | ⚙️ ${item.makina || '-'}</div>
-            </div>
-            <div>
-              <button onclick="raporDetayGoster(${item.id})" class="btn btn-sm btn-info text-white p-1 style-btn">👁️ Detay</button>
-              <button onclick="raporDuzenle(${item.id})" class="btn btn-sm btn-warning text-white p-1 style-btn">✏️</button>
-              <button onclick="raporSil(${item.id})" class="btn btn-sm btn-danger p-1 style-btn">🗑️</button>
-            </div>
-          </div>
-        `;
-        alan.appendChild(col);
-      });
-    }
-
-    function raporDuzenle(id) {
-      const rapor = window.tumRaporlar.find(r => r.id == id);
-      if (!rapor) return;
-
-      aktifRaporId = rapor.id;
-      document.getElementById('btnKaydet').innerText = "🔄 Güncelle";
-
-      document.getElementById('musteriAdi').value = rapor.musteri_adi || '';
-      document.getElementById('urunAdi').value = rapor.urun_adi || '';
-      document.getElementById('tarih').value = rapor.tarih || '';
-      document.getElementById('gram').value = rapor.gram || '';
-      document.getElementById('renk').value = rapor.renk || '';
-      document.getElementById('makina').value = rapor.makina || '';
-      
-      document.getElementById('ham1').value = rapor.ham1 || '';
-      document.getElementById('ham2').value = rapor.ham2 || '';
-      document.getElementById('ham3').value = rapor.ham3 || '';
-      document.getElementById('ham4').value = rapor.ham4 || '';
-      document.getElementById('ham1_kod').value = rapor.ham1_kod || '';
-      document.getElementById('ham2_kod').value = rapor.ham2_kod || '';
-      document.getElementById('ham3_kod').value = rapor.ham3_kod || '';
-      document.getElementById('ham4_kod').value = rapor.ham4_kod || '';
-
-      document.getElementById('ilac1').value = rapor.ilac1 || '';
-      document.getElementById('ilac2').value = rapor.ilac2 || '';
-      document.getElementById('ilac3').value = rapor.ilac3 || '';
-      document.getElementById('ilac4').value = rapor.ilac4 || '';
-      document.getElementById('ilac1_kod').value = rapor.ilac1_kod || '';
-      document.getElementById('ilac2_kod').value = rapor.ilac2_kod || '';
-      document.getElementById('ilac3_kod').value = rapor.ilac3_kod || '';
-      document.getElementById('ilac4_kod').value = rapor.ilac4_kod || '';
-
-      document.getElementById('notlar').value = rapor.notlar || '';
-
-      document.getElementById('fotoGaleriAlani').innerHTML = "";
-      tumFotoBase64Listesi = Array.isArray(rapor.foto_listesi) ? rapor.foto_listesi : [];
-      tumFotoBase64Listesi.forEach((src, index) => galeriyiEkranaCiz(src, index));
-
-      window.scrollTo({ top: document.getElementById('yazdirilacakAlan').offsetTop - 10, behavior: 'smooth' });
-    }
-
-    function raporDetayGoster(id) {
-      raporDuzenle(id);
-      const detayIcerik = document.getElementById('yazdirilacakAlan').cloneNode(true);
-      detayIcerik.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
-      
-      const modalBody = document.getElementById('detayModalIcerik');
-      modalBody.innerHTML = "";
-      modalBody.appendChild(detayIcerik);
-
-      const modal = new bootstrap.Modal(document.getElementById('detayModal'));
-      modal.show();
-    }
-
-    async function raporSil(id) {
-      if (!confirm("Bu raporu silmek istediğinize emin misiniz?")) return;
-      
-      const { error } = await _supabase.from('uretim_fotogaleri').delete().eq('id', id);
-      if (error) {
-        alert("Silme hatası: " + error.message);
-      } else {
-        alert("Rapor silindi.");
-        kayitliRaporlariListele();
-      }
-    }
-
-    function formuTemizle() {
-      aktifRaporId = null;
-      document.getElementById('btnKaydet').innerText = "💾 Kaydet";
-      
-      document.querySelectorAll('#yazdirilacakAlan input, #yazdirilacakAlan textarea').forEach(i => i.value = "");
-      document.getElementById('tarih').valueAsDate = new Date();
-      
-      document.getElementById('fotoGaleriAlani').innerHTML = "";
-      tumFotoBase64Listesi = [];
-      document.getElementById('fotoSayac').innerText = "(0 / 10)";
-    }
-
-    function pdfIndir() {
-      const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
-      element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
-
-      const opt = {
-        margin: [5, 5, 5, 5],
-        filename: 'uretim_fotograflari.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-      html2pdf().set(opt).from(element).save();
-    }
-
-    async function pdfPaylas() {
-      const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
-      element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
-
-      const opt = {
-        margin: [5, 5, 5, 5],
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-      
-      const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
-      const dosya = new File([pdfBlob], 'uretim_fotograflari.pdf', { type: 'application/pdf' });
-      
-      if (navigator.canShare && navigator.canShare({ files: [dosya] })) {
-        await navigator.share({ files: [dosya], title: 'Üretim Fotoğrafları Raporu' });
-      } else {
-        pdfIndir();
-      }
-    }
-  </script>
-</body>
-</html>
+          const { error } = await _supabase.from('uretim_fotogaleri').update(payload).eq(
