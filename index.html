@@ -48,8 +48,6 @@
       width: 100% !important; 
       margin: 0 !important; 
       border: 1px solid #e2e8f0;
-      page-break-after: always !important; 
-      break-after: page !important;
     }
     
     .pdf-baslik { 
@@ -180,7 +178,7 @@
       width: 100%; 
     }
     
- .foto-kart { 
+    .foto-kart { 
       width: 100% !important; 
       max-width: 100% !important;
       margin: 0 auto 10px auto !important;
@@ -192,13 +190,11 @@
       border-radius: 8px;
       page-break-inside: avoid !important;
       break-inside: avoid !important;
-      page-break-before: auto !important;
-      break-before: auto !important;
     }
     
     .foto-kart img { 
       max-width: 100% !important;
-      max-height: 150mm !important; /* Fotoğraf boyunu sınırlandırarak alt alta sıkı durmasını sağlar */
+      max-height: 170mm !important; 
       width: auto !important;
       height: auto !important;
       object-fit: contain !important; 
@@ -212,13 +208,24 @@
     .liste-kart { background: #fff; border-radius: 8px; padding: 8px; margin-bottom: 6px; border-left: 5px solid var(--accent-color); box-shadow: 0 2px 6px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; }
     .notlar-alani { border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px; width: 100%; font-size: 12px; background-color: #f8fafc; color: #0f172a; resize: vertical; }
 
+    /* Yazdırma ve PDF Aktarım Kuralları (Boşlukları Engeller) */
     @media print { 
+      body { background: #fff !important; color: #000 !important; padding: 0 !important; } 
+      @page { size: A4; margin: 10mm; }
       .no-print, .foto-sil-btn { display: none !important; } 
-      body { background-color: #fff; padding: 0; } 
-      .rapor-kutu { box-shadow: none; padding: 0 !important; border: none; } 
+      .rapor-kutu { box-shadow: none !important; padding: 0 !important; border: none !important; } 
       .foto-kart {
-        page-break-inside: avoid !important;
         break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        border: none !important;
+        box-shadow: none !important;
+        margin-bottom: 15px !important;
+      }
+      .foto-kart img {
+        max-height: 170mm !important;
+        width: auto !important;
+        max-width: 100% !important;
+        object-fit: contain !important;
       }
     }
   </style>
@@ -814,42 +821,14 @@
       document.getElementById('fotoSayac').innerText = "(0 / 15)";
     }
 
-  function pdfAyarlari() {
-      return {
-        margin: [5, 5, 5, 5],
-        filename: 'uretim_proses_raporu.pdf',
-        image: { type: 'jpeg', quality: 0.92 },
-        html2canvas: { 
-          scale: 2, 
-          useCORS: true, 
-          letterRendering: true,
-          scrollY: 0 
-        },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: [] } // Sayfa zorlamalarını kapatarak boşluk oluşmasını engeller
-      };
-    }
-
     function pdfIndir() {
-      const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
-      element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
-      html2pdf().set(pdfAyarlari()).from(element).save();
+      // Tarayıcının yerel yazdırma/PDF kaydetme özelliğini açarak aradaki boşlukları tamamen ortadan kaldırır
+      window.print();
     }
 
     async function pdfPaylas() {
-      const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
-      element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
-      try {
-        const pdfBlob = await html2pdf().set(pdfAyarlari()).from(element).outputPdf('blob');
-        const dosya = new File([pdfBlob], 'uretim_proses_raporu.pdf', { type: 'application/pdf' });
-        if (navigator.canShare && navigator.canShare({ files: [dosya] })) {
-          await navigator.share({ files: [dosya], title: 'Üretim Proses Raporu' });
-        } else {
-          pdfIndir();
-        }
-      } catch (err) {
-        alert("Paylaşım hatası: " + err.message);
-      }
+      // Tarayıcı destekliyorsa doğrudan yazdırma ekranını tetikler
+      window.print();
     }
   </script>
 </body>
