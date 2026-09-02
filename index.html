@@ -180,25 +180,19 @@
     .foto-kart { 
       width: 100% !important; 
       max-width: 100% !important;
-      margin: 0 auto;
+      margin: 0 auto 10px auto;
       text-align: center; 
       position: relative; 
       background: #ffffff;
-      padding: 10px !important;
+      padding: 8px !important;
       border: 1px solid #e2e8f0;
       border-radius: 8px;
-      page-break-before: always !important;
-      break-before: page !important;
       page-break-inside: avoid !important;
       break-inside: avoid !important;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
     }
     .foto-kart img { 
       max-width: 100% !important;
-      max-height: 220mm; 
+      max-height: 180mm; 
       width: auto !important;
       height: auto !important;
       object-fit: contain !important; 
@@ -217,11 +211,8 @@
       body { background-color: #fff; padding: 0; } 
       .rapor-kutu { box-shadow: none; padding: 0 !important; border: none; } 
       .foto-kart {
-        page-break-before: always !important;
-        break-before: page !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
-        height: auto !important;
       }
     }
   </style>
@@ -829,7 +820,7 @@
           scrollY: 0 
         },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'], avoid: ['.foto-kart', 'tr', 'table', '.uretim-tablo'] }
+        pagebreak: { mode: ['css', 'legacy'] }
       };
     }
 
