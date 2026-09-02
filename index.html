@@ -39,6 +39,7 @@
     }
 
     .main-wrapper { max-width: 100%; padding: 4px; margin: 0 auto; display: none; }
+    
     .rapor-kutu { 
       background: var(--card-bg); 
       padding: 8px !important; 
@@ -47,6 +48,8 @@
       width: 100% !important; 
       margin: 0 !important; 
       border: 1px solid #e2e8f0;
+      page-break-after: always !important; 
+      break-after: page !important;
     }
     
     .pdf-baslik { 
@@ -177,7 +180,7 @@
       width: 100%; 
     }
     
-  .foto-kart { 
+    .foto-kart { 
       width: 100% !important; 
       max-width: 100% !important;
       margin: 10px auto;
@@ -191,6 +194,8 @@
       break-inside: avoid !important;
       page-break-before: always !important;
       break-before: page !important;
+      page-break-after: always !important;
+      break-after: page !important;
     }
     
     .foto-kart img { 
@@ -811,11 +816,11 @@
       document.getElementById('fotoSayac').innerText = "(0 / 15)";
     }
 
-   function pdfAyarlari() {
+    function pdfAyarlari() {
       return {
         margin: [2, 2, 2, 2],
         filename: 'uretim_proses_raporu.pdf',
-        image: { type: 'jpeg', quality: 0.92 },
+        image: { type: 'jpeg', quality: 0.95 },
         html2canvas: { 
           scale: 2, 
           useCORS: true, 
