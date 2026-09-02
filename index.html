@@ -39,7 +39,6 @@
     }
 
     .main-wrapper { max-width: 100%; padding: 4px; margin: 0 auto; display: none; }
-    
     .rapor-kutu { 
       background: var(--card-bg); 
       padding: 8px !important; 
@@ -181,20 +180,25 @@
     .foto-kart { 
       width: 100% !important; 
       max-width: 100% !important;
-      margin: 0 auto 8px auto !important;
+      margin: 0 auto;
       text-align: center; 
       position: relative; 
       background: #ffffff;
-      padding: 4px !important;
+      padding: 10px !important;
       border: 1px solid #e2e8f0;
-      border-radius: 6px;
+      border-radius: 8px;
+      page-break-before: always !important;
+      break-before: page !important;
       page-break-inside: avoid !important;
       break-inside: avoid !important;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
-    
     .foto-kart img { 
       max-width: 100% !important;
-      max-height: 140mm !important; 
+      max-height: 220mm; 
       width: auto !important;
       height: auto !important;
       object-fit: contain !important; 
@@ -207,6 +211,19 @@
     .foto-sil-btn { position: absolute; top: 12px; right: 12px; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
     .liste-kart { background: #fff; border-radius: 8px; padding: 8px; margin-bottom: 6px; border-left: 5px solid var(--accent-color); box-shadow: 0 2px 6px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; }
     .notlar-alani { border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px; width: 100%; font-size: 12px; background-color: #f8fafc; color: #0f172a; resize: vertical; }
+
+    @media print { 
+      .no-print, .foto-sil-btn { display: none !important; } 
+      body { background-color: #fff; padding: 0; } 
+      .rapor-kutu { box-shadow: none; padding: 0 !important; border: none; } 
+      .foto-kart {
+        page-break-before: always !important;
+        break-before: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        height: auto !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -473,6 +490,7 @@
           <button type="button" class="btn btn-secondary btn-sm fw-bold" data-bs-dismiss="modal">Kapat</button>
           <div>
             <button onclick="pdfPaylas()" class="btn btn-success btn-sm me-1 fw-bold">💬 WhatsApp / Paylaş</button>
+            <button onclick="window.print()" class="btn btn-dark btn-sm me-1 fw-bold">🖨️ Yazdır</button>
             <button onclick="pdfIndir()" class="btn btn-danger btn-sm fw-bold">📄 PDF İndir</button>
           </div>
         </div>
@@ -589,7 +607,7 @@
       const div = document.createElement('div');
       div.className = "foto-kart";
       div.innerHTML = `
-        <button class="btn btn-sm btn-danger foto-sil-btn" onclick="fotoSil(${index})">❌ Sil</button>
+        <button class="btn btn-sm btn-danger foto-sil-btn no-print" onclick="fotoSil(${index})">❌ Sil</button>
         <img src="${src}" onclick="fotografiTamEkranAc('${src}')" title="Büyütmek için tıklayın">
       `;
       alan.appendChild(div);
@@ -767,10 +785,8 @@
 
     function raporDetayGoster(id) {
       raporDuzenle(id);
-      
-      // Sadece ana rapor kutusunun klonunu alıp modal içine basıyoruz (sil butonları hariç)
       const detayIcerik = document.getElementById('yazdirilacakAlan').cloneNode(true);
-      detayIcerik.querySelectorAll('.foto-sil-btn').forEach(el => el.remove());
+      detayIcerik.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
       
       const modalBody = document.getElementById('detayModalIcerik');
       modalBody.innerHTML = "";
@@ -801,36 +817,42 @@
       document.getElementById('fotoSayac').innerText = "(0 / 15)";
     }
 
-    function pdfIndir() {
-      // Modaldaki butonlar veya dış etkenler karışmasın diye doğrudan ana rapor alanını hedef alıyoruz
-      const element = document.getElementById('yazdirilacakAlan');
-      
-      // Geçici olarak ekrandaki fotoğraf sil butonlarını gizle ki PDF'te çıkmasınlar
-      const silButonlari = element.querySelectorAll('.foto-sil-btn');
-      silButonlari.forEach(b => b.style.display = 'none');
-
-      const opt = {
-        margin:       [5, 5, 5, 5],
-        filename:     'uretim_proses_raporu.pdf',
-        image:        { type: 'jpeg', quality: 0.92 },
-        html2canvas:  { 
+    function pdfAyarlari() {
+      return {
+        margin: [5, 5, 5, 5],
+        filename: 'uretim_proses_raporu.pdf',
+        image: { type: 'jpeg', quality: 0.95 },
+        html2canvas: { 
           scale: 2, 
           useCORS: true, 
           letterRendering: true,
           scrollY: 0 
         },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['css', 'legacy'], avoid: ['.foto-kart', 'tr', 'table', '.uretim-tablo'] }
       };
-
-      html2pdf().from(element).set(opt).save().then(() => {
-        // PDF indikten sonra butonları eski haline getir
-        silButonlari.forEach(b => b.style.display = 'block');
-      });
     }
 
-    function pdfPaylas() {
-      pdfIndir();
+    function pdfIndir() {
+      const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
+      element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
+      html2pdf().set(pdfAyarlari()).from(element).save();
+    }
+
+    async function pdfPaylas() {
+      const element = document.getElementById('yazdirilacakAlan').cloneNode(true);
+      element.querySelectorAll('.no-print, .foto-sil-btn').forEach(el => el.remove());
+      try {
+        const pdfBlob = await html2pdf().set(pdfAyarlari()).from(element).outputPdf('blob');
+        const dosya = new File([pdfBlob], 'uretim_proses_raporu.pdf', { type: 'application/pdf' });
+        if (navigator.canShare && navigator.canShare({ files: [dosya] })) {
+          await navigator.share({ files: [dosya], title: 'Üretim Proses Raporu' });
+        } else {
+          pdfIndir();
+        }
+      } catch (err) {
+        alert("Paylaşım hatası: " + err.message);
+      }
     }
   </script>
 </body>
