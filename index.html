@@ -448,7 +448,7 @@
       </div>
 
       <div class="card border-2 border-dashed border-primary p-2 text-center mb-2 no-print bg-light" style="border-radius: 8px;">
-        <h6 class="fw-bold text-primary mb-1 small">📷 Fotoğraf Ekle (En fazla 15 Adet)</h6>
+        <h6 class="fw-bold text-primary mb-1 small">📷 Fotoğraf Ekle (En fazla 25 Adet)</h6>
         <input type="file" id="fotoYukleInput" multiple accept="image/*" class="d-none" onchange="fotograflariIsle(this)">
         <div>
           <label for="fotoYukleInput" class="btn btn-primary btn-sm px-3 py-1 fw-bold shadow-sm" style="background-color: var(--accent-color);">Fotoğraf Seç</label>
@@ -569,8 +569,8 @@
 
     function fotograflariIsle(input) {
       const files = Array.from(input.files);
-      if (tumFotoBase64Listesi.length + files.length > 15) {
-        alert("En fazla 15 adet fotoğraf ekleyebilirsiniz!");
+      if (tumFotoBase64Listesi.length + files.length > 25) {
+        alert("En fazla 25 adet fotoğraf ekleyebilirsiniz!");
         return;
       }
       files.forEach(file => {
@@ -798,7 +798,7 @@
       document.getElementById('tarih').valueAsDate = new Date();
       document.getElementById('fotoGaleriAlani').innerHTML = "";
       tumFotoBase64Listesi = [];
-      document.getElementById('fotoSayac').innerText = "(0 / 15)";
+      document.getElementById('fotoSayac').innerText = "(0 / 25)";
     }
 
     function pdfIndir() {
