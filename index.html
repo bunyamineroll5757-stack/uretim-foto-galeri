@@ -867,4 +867,37 @@
         silButonlari.forEach(b => b.style.display = 'block');
       }
     }
+    async function pdfPaylas() {
+      const element = document.getElementById('yazdirilacakAlan');
+
+      const silButonlari = element.querySelectorAll('.foto-sil-btn');
+      silButonlari.forEach(b => b.style.display = 'none');
+
+      const opt = {
+        margin:       [5, 5, 5, 5],
+        filename:     'uretim_proses_raporu.pdf',
+        image:        { type: 'jpeg', quality: 0.92 },
+        html2canvas:  { scale: 2, useCORS: true, letterRendering: true, scrollY: 0 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+      };
+
+      try {
+        // Önce dosyayı standart yöntemle oluşturup indiriyoruz
+        await html2pdf().from(element).set(opt).save();
+
+        // Eğer telefonun tarayıcısı metin/bağlantı paylaşımını destekliyorsa WhatsApp seçeneğini tetikle
+        if (navigator.share) {
+          await navigator.share({
+            title: 'Üretim Proses Raporu',
+            text: 'Üretim raporu PDF olarak indirildi. İndirilenler klasöründen WhatsApp ile gönderebilirsiniz.',
+            url: window.location.href
+          });
+        }
+      } catch (err) {
+        console.log("Paylaşım iptal edildi veya hata oluştu: ", err);
+      } finally {
+        silButonlari.forEach(b => b.style.display = 'block');
+      }
+    }
 
