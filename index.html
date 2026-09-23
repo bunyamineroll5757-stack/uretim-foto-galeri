@@ -472,7 +472,7 @@
         <div class="modal-footer d-flex justify-content-between">
           <button type="button" class="btn btn-secondary btn-sm fw-bold" data-bs-dismiss="modal">Kapat</button>
           <div>
-            <button onclick="pdfPaylas()" class="btn btn-success btn-sm me-1 fw-bold">💬 WhatsApp / Paylaş</button>
+            <button onclick="whatsappPaylas()" class="btn btn-success btn-sm me-1 fw-bold">💬 WhatsApp Paylaş</button>
             <button onclick="pdfIndir()" class="btn btn-danger btn-sm fw-bold">📄 PDF İndir</button>
           </div>
         </div>
@@ -584,12 +584,12 @@
 
     function galeriyiEkranaCiz(src, index) {
       const alan = document.getElementById('fotoGaleriAlani');
-      document.getElementById('fotoSayac').innerText = `(${tumFotoBase64Listesi.length} / 15)`;
+      document.getElementById('fotoSayac').innerText = `(${tumFotoBase64Listesi.length} / 25)`;
 
       const div = document.createElement('div');
       div.className = "foto-kart";
       div.innerHTML = `
-        <button class="btn btn-sm btn-danger foto-sil-btn" onclick="fotoSil(${index})">❌ Sil</button>
+        <button type="button" class="btn btn-sm btn-danger foto-sil-btn" onclick="fotoSil(${index})">❌ Sil</button>
         <img src="${src}" onclick="fotografiTamEkranAc('${src}')" title="Büyütmek için tıklayın">
       `;
       alan.appendChild(div);
@@ -606,7 +606,7 @@
       const alan = document.getElementById('fotoGaleriAlani');
       alan.innerHTML = "";
       tumFotoBase64Listesi.forEach((src, i) => galeriyiEkranaCiz(src, i));
-      document.getElementById('fotoSayac').innerText = `(${tumFotoBase64Listesi.length} / 15)`;
+      document.getElementById('fotoSayac').innerText = `(${tumFotoBase64Listesi.length} / 25)`;
     }
 
     async function veriyiKaydet() {
@@ -768,7 +768,6 @@
     function raporDetayGoster(id) {
       raporDuzenle(id);
       
-      // Sadece ana rapor kutusunun klonunu alıp modal içine basıyoruz (sil butonları hariç)
       const detayIcerik = document.getElementById('yazdirilacakAlan').cloneNode(true);
       detayIcerik.querySelectorAll('.foto-sil-btn').forEach(el => el.remove());
       
@@ -802,10 +801,7 @@
     }
 
     function pdfIndir() {
-      // Modaldaki butonlar veya dış etkenler karışmasın diye doğrudan ana rapor alanını hedef alıyoruz
       const element = document.getElementById('yazdirilacakAlan');
-      
-      // Geçici olarak ekrandaki fotoğraf sil butonlarını gizle ki PDF'te çıkmasınlar
       const silButonlari = element.querySelectorAll('.foto-sil-btn');
       silButonlari.forEach(b => b.style.display = 'none');
 
@@ -824,10 +820,26 @@
       };
 
       html2pdf().from(element).set(opt).save().then(() => {
-        // PDF indikten sonra butonları eski haline getir
         silButonlari.forEach(b => b.style.display = 'block');
       });
     }
 
+    function whatsappPaylas() {
+      const musteri = document.getElementById('musteriAdi').value || 'Belirtilmemiş';
+      const urun = document.getElementById('urunAdi').value || 'Belirtilmemiş';
+      const tarih = document.getElementById('tarih').value || '-';
+      const notlar = document.getElementById('notlar').value || '-';
 
+      const metin = `*ÜRETİM PROSES RAPORU* ⚙️\n\n` +
+                    `👤 *Müşteri:* ${musteri}\n` +
+                    `📦 *Ürün:* ${urun}\n` +
+                    `📅 *Tarih:* ${tarih}\n` +
+                    `📝 *Notlar:* ${notlar}\n\n` +
+                    `_Rapor detayları sisteme kaydedilmiştir._`;
 
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(metin)}`;
+      window.open(whatsappUrl, '_blank');
+    }
+  </script>
+</body>
+</html>
