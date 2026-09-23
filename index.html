@@ -819,26 +819,69 @@
         pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
+      return html2pdf().from(element).set(opt).outputPdf('blob');
+    }
+
+    function pdfIndirVeKaydet() {
+      const element = document.getElementById('yazdirilacakAlan');
+      const silButonlari = element.querySelectorAll('.foto-sil-btn');
+      silButonlari.forEach(b => b.style.display = 'none');
+
+      const opt = {
+        margin:       [5, 5, 5, 5],
+        filename:     'uretim_proses_raporu.pdf',
+        image:        { type: 'jpeg', quality: 0.92 },
+        html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
       html2pdf().from(element).set(opt).save().then(() => {
         silButonlari.forEach(b => b.style.display = 'block');
       });
     }
 
-    function whatsappPaylas() {
-      const musteri = document.getElementById('musteriAdi').value || 'Belirtilmemiş';
-      const urun = document.getElementById('urunAdi').value || 'Belirtilmemiş';
-      const tarih = document.getElementById('tarih').value || '-';
-      const notlar = document.getElementById('notlar').value || '-';
+    async function whatsappPaylas() {
+      const element = document.getElementById('yazdirilacakAlan');
+      const silButonlari = element.querySelectorAll('.foto-sil-btn');
+      silButonlari.forEach(b => b.style.display = 'none');
 
-      const metin = `*ÜRETİM PROSES RAPORU* ⚙️\n\n` +
-                    `👤 *Müşteri:* ${musteri}\n` +
-                    `📦 *Ürün:* ${urun}\n` +
-                    `📅 *Tarih:* ${tarih}\n` +
-                    `📝 *Notlar:* ${notlar}\n\n` +
-                    `_Rapor detayları sisteme kaydedilmiştir._`;
+      const opt = {
+        margin: [5, 5, 5, 5],
+        filename: 'uretim_proses_raporu.pdf',
+        image: { type: 'jpeg', quality: 0.92 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
 
-      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(metin)}`;
-      window.open(whatsappUrl, '_blank');
+      try {
+        const pdfBlob = await html2pdf().from(element).set(opt).outputPdf('blob');
+        silButonlari.forEach(b => b.style.display = 'block');
+
+        const file = new File([pdfBlob], "uretim_proses_raporu.pdf", { type: "application/pdf" });
+        const musteri = document.getElementById('musteriAdi').value || '';
+        const urun = document.getElementById('urunAdi').value || '';
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'Üretim Proses Raporu',
+            text: `Üretim Raporu - Müşteri: ${musteri}, Ürün: ${urun}`
+          });
+        } else {
+          // Desteklemeyen cihazlar için normal indirme ve fallback
+          const url = URL.createObjectURL(pdfBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'uretim_proses_raporu.pdf';
+          a.click();
+          
+          const metin = `*ÜRETİM PROSES RAPORU* ⚙️\nMüşteri: ${musteri}\nÜrün: ${urun}`;
+          window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(metin)}`, '_blank');
+        }
+      } catch (err) {
+        silButonlari.forEach(b => b.style.display = 'block');
+        console.error(err);
+      }
     }
   </script>
 </body>
