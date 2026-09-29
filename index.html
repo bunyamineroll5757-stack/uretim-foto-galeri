@@ -563,48 +563,51 @@
       location.reload();
     }
 
-    function fotoSikistirVeOku(file, callback) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
-          
-          const max_size = 1200;
-          if (width > height) {
-            if (width > max_size) { height *= max_size / width; width = max_size; }
-          } else {
-            if (height > max_size) { width *= max_size / height; height = max_size; }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          
-          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
-          callback(compressedBase64);
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function fotograflariIsle(input) {
+  async function fotograflariIsle(input) {
       const files = Array.from(input.files);
       if (tumFotoBase64Listesi.length + files.length > 25) {
         alert("En fazla 25 adet fotoğraf ekleyebilirsiniz!");
         return;
       }
-      files.forEach(file => {
-        fotoSikistirVeOku(file, function(base64Data) {
-          tumFotoBase64Listesi.push(base64Data);
-          galeriyiEkranaCiz(base64Data, tumFotoBase64Listesi.length - 1);
-        });
-      });
+
+      // Seçilen fotoğrafları sırasıyla işlemek için döngü
+      for (let file of files) {
+        const base64Data = await fotoSikistirVeOku(file);
+        tumFotoBase64Listesi.push(base64Data);
+        galeriyiEkranaCiz(base64Data, tumFotoBase64Listesi.indexOf(base64Data));
+      }
       input.value = "";
+    }
+
+    function fotoSikistirVeOku(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            
+            const max_size = 1200;
+            if (width > height) {
+              if (width > max_size) { height *= max_size / width; width = max_size; }
+            } else {
+              if (height > max_size) { width *= max_size / height; height = max_size; }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+            resolve(compressedBase64);
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
     }
 
     function galeriyiEkranaCiz(src, index) {
