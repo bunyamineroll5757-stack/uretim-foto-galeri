@@ -41,37 +41,13 @@
     .main-wrapper { max-width: 100%; padding: 4px; margin: 0 auto; display: none; }
     
     .rapor-kutu { 
-      background-color: var(--card-bg); 
+      background: var(--card-bg); 
       padding: 8px !important; 
       border-radius: 6px; 
       box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
       width: 100% !important; 
       margin: 0 !important; 
       border: 1px solid #e2e8f0;
-      position: relative;
-      overflow: hidden;
-    }
-
-   /* Galatasaray Logosu / Filigranı */
-    .rapor-kutu::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><text x='50%' y='40%' dominant-baseline='middle' text-anchor='middle' font-size='45' font-weight='bold' fill='%23fdc500' opacity='0.25'>GS</text><text x='50%' y='65%' dominant-baseline='middle' text-anchor='middle' font-size='25' font-weight='bold' fill='%23a50021' opacity='0.25'>1905</text><text x='50%' y='85%' dominant-baseline='middle' text-anchor='middle' font-size='18' fill='%23fdc500' opacity='0.3'>⭐⭐⭐⭐</text></svg>");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 50%;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* İçeriklerin logonun üzerinde net görünmesi için */
-    .rapor-kutu > * {
-      position: relative;
-      z-index: 2;
     }
     
     .pdf-baslik { 
@@ -92,13 +68,13 @@
     .uretim-tablo { table-layout: fixed; width: 100% !important; margin-bottom: 8px !important; border-collapse: separate; border-spacing: 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); }
     
     .uretim-tablo th { background-color: var(--header-bg); color: #ffffff; font-weight: 700; font-size: 11px; text-align: center; padding: 6px 3px !important; word-wrap: break-word; border: 1px solid #334155; }
-    .uretim-tablo td { font-size: 12px; text-align: center; vertical-align: middle; padding: 3px !important; background-color: rgba(255, 255, 255, 0.85); border: 1px solid #e2e8f0; }
+    .uretim-tablo td { font-size: 12px; text-align: center; vertical-align: middle; padding: 3px !important; background-color: #fff; border: 1px solid #e2e8f0; }
     
     .uretim-tablo input, .uretim-tablo textarea { 
       font-size: 12px !important; 
       width: 100% !important; 
       text-align: center; 
-      background-color: rgba(248, 250, 252, 0.85);
+      background-color: #f8fafc;
       border: 1px solid #cbd5e1 !important;
       border-radius: 4px;
       padding: 4px 2px !important;
@@ -126,7 +102,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: rgba(248, 250, 252, 0.85);
+      background-color: #f8fafc;
       border: 1px solid #cbd5e1;
       border-radius: 4px;
       padding: 2px 4px;
@@ -162,7 +138,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: rgba(248, 250, 252, 0.85);
+      background-color: #f8fafc;
       border: 1px solid #cbd5e1;
       border-radius: 4px;
       padding: 2px 4px;
@@ -230,7 +206,7 @@
 
     .foto-sil-btn { position: absolute; top: 12px; right: 12px; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
     .liste-kart { background: #fff; border-radius: 8px; padding: 8px; margin-bottom: 6px; border-left: 5px solid var(--accent-color); box-shadow: 0 2px 6px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; }
-    .notlar-alani { border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px; width: 100%; font-size: 12px; background-color: rgba(248, 250, 252, 0.85); color: #0f172a; resize: vertical; }
+    .notlar-alani { border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px; width: 100%; font-size: 12px; background-color: #f8fafc; color: #0f172a; resize: vertical; }
   </style>
 </head>
 <body>
@@ -497,7 +473,7 @@
           <button type="button" class="btn btn-secondary btn-sm fw-bold" data-bs-dismiss="modal">Kapat</button>
           <div>
             <button onclick="whatsappPaylas()" class="btn btn-success btn-sm me-1 fw-bold">💬 WhatsApp Paylaş</button>
-            <button onclick="pdfIndirVeKaydet()" class="btn btn-danger btn-sm fw-bold">📄 PDF İndir</button>
+            <button onclick="pdfIndir()" class="btn btn-danger btn-sm fw-bold">📄 PDF İndir</button>
           </div>
         </div>
       </div>
@@ -562,51 +538,48 @@
       location.reload();
     }
 
-  async function fotograflariIsle(input) {
+    function fotoSikistirVeOku(file, callback) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          const max_size = 1200;
+          if (width > height) {
+            if (width > max_size) { height *= max_size / width; width = max_size; }
+          } else {
+            if (height > max_size) { width *= max_size / height; height = max_size; }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+          callback(compressedBase64);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function fotograflariIsle(input) {
       const files = Array.from(input.files);
       if (tumFotoBase64Listesi.length + files.length > 25) {
         alert("En fazla 25 adet fotoğraf ekleyebilirsiniz!");
         return;
       }
-
-      // Seçilen fotoğrafları sırasıyla işlemek için döngü
-      for (let file of files) {
-        const base64Data = await fotoSikistirVeOku(file);
-        tumFotoBase64Listesi.push(base64Data);
-        galeriyiEkranaCiz(base64Data, tumFotoBase64Listesi.indexOf(base64Data));
-      }
-      input.value = "";
-    }
-
-    function fotoSikistirVeOku(file) {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const img = new Image();
-          img.onload = function() {
-            const canvas = document.createElement('canvas');
-            let width = img.width;
-            let height = img.height;
-            
-            const max_size = 1200;
-            if (width > height) {
-              if (width > max_size) { height *= max_size / width; width = max_size; }
-            } else {
-              if (height > max_size) { width *= max_size / height; height = max_size; }
-            }
-
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-            
-            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
-            resolve(compressedBase64);
-          };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+      files.forEach(file => {
+        fotoSikistirVeOku(file, function(base64Data) {
+          tumFotoBase64Listesi.push(base64Data);
+          galeriyiEkranaCiz(base64Data, tumFotoBase64Listesi.length - 1);
+        });
       });
+      input.value = "";
     }
 
     function galeriyiEkranaCiz(src, index) {
@@ -827,6 +800,28 @@
       document.getElementById('fotoSayac').innerText = "(0 / 25)";
     }
 
+    function pdfIndir() {
+      const element = document.getElementById('yazdirilacakAlan');
+      const silButonlari = element.querySelectorAll('.foto-sil-btn');
+      silButonlari.forEach(b => b.style.display = 'none');
+
+      const opt = {
+        margin:       [5, 5, 5, 5],
+        filename:     'uretim_proses_raporu.pdf',
+        image:        { type: 'jpeg', quality: 0.92 },
+        html2canvas:  { 
+          scale: 2, 
+          useCORS: true, 
+          letterRendering: true,
+          scrollY: 0 
+        },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+      };
+
+      return html2pdf().from(element).set(opt).outputPdf('blob');
+    }
+
     function pdfIndirVeKaydet() {
       const element = document.getElementById('yazdirilacakAlan');
       const silButonlari = element.querySelectorAll('.foto-sil-btn');
@@ -873,6 +868,7 @@
             text: `Üretim Raporu - Müşteri: ${musteri}, Ürün: ${urun}`
           });
         } else {
+          // Desteklemeyen cihazlar için normal indirme ve fallback
           const url = URL.createObjectURL(pdfBlob);
           const a = document.createElement('a');
           a.href = url;
@@ -890,4 +886,3 @@
   </script>
 </body>
 </html>
- 
