@@ -673,11 +673,12 @@ async function kayitliRaporlariListele() {
 
       if (!_supabase) return;
 
-      // Fotoğraf verilerini (foto_listesi) ilk listeden tamamen çıkararak zaman aşımını önliyoruz
+      // Zaman aşımını önlemek için sadece son 20 kaydı ve fotoğraflar haricindeki alanları çekiyoruz
       const { data, error } = await _supabase
         .from('uretim_fotogaleri')
         .select('id, musteri_adi, urun_adi, tarih, tarak_hiz, saatlik_kg, kalinlik, gram, renk, kesim_eni, sarim, cap, firin_isi, ham1, ham2, ham3, ham4, ham1_kod, ham2_kod, ham3_kod, ham4_kod, ilac1, ilac2, ilac3, ilac4, ilac1_kod, ilac2_kod, ilac3_kod, ilac4_kod, notlar')
-        .order('id', { ascending: false });
+        .order('id', { ascending: false })
+        .limit(20);
       
       if (error) {
         console.error("Supabase Hata:", error);
@@ -699,7 +700,7 @@ async function kayitliRaporlariListele() {
       alan.innerHTML = "";
 
       if (dataListesi.length === 0) {
-        alan.innerHTML = '<div class="text-secondary small text-center">Eşleşen kayıt bulunamadı.</div>';
+        alan.innerHTML = '<div class="text-secondary small text-center py-2">Eşleşen kayıt bulunamadı.</div>';
         return;
       }
 
@@ -713,9 +714,9 @@ async function kayitliRaporlariListele() {
               <div class="small text-muted" style="font-size:10px;">📅 ${item.tarih || '-'} ${item.tarak_hiz ? '| ⚡ ' + item.tarak_hiz : ''}</div>
             </div>
             <div>
-              <button onclick="raporDetayGoster(${item.id})" class="btn btn-sm btn-info text-white p-1 fw-bold">👁️</button>
-              <button onclick="raporDuzenle(${item.id})" class="btn btn-sm btn-warning text-white p-1 fw-bold">✏️</button>
-              <button onclick="raporSil(${item.id})" class="btn btn-sm btn-danger p-1 fw-bold">🗑️</button>
+              <button onclick="raporDetayGoster(${item.id})" class="btn btn-sm btn-info text-white p-1 fw-bold" title="Detay Göster">👁️</button>
+              <button onclick="raporDuzenle(${item.id})" class="btn btn-sm btn-warning text-white p-1 fw-bold" title="Düzenle">✏️</button>
+              <button onclick="raporSil(${item.id})" class="btn btn-sm btn-danger p-1 fw-bold" title="Sil">🗑️</button>
             </div>
           </div>
         `;
@@ -725,20 +726,35 @@ async function kayitliRaporlariListele() {
 
     function raporlariFiltrele(aramaMetni) {
       const arama = aramaMetni.toLowerCase().trim();
+      if (!window.tumRaporlar) return;
+
       const filtrelenmis = window.tumRaporlar.filter(item => {
         const musteri = (item.musteri_adi || '').toLowerCase();
         const urun = (item.urun_adi || '').toLowerCase();
         return musteri.includes(arama) || urun.includes(arama);
       });
+
       listeyiEkranaBas(filtrelenmis);
     }
 
-    function raporDuzenle(id) {
-      const rapor = window.tumRaporlar.find(r => r.id == id);
+    async function raporDuzenle(id) {
+      let rapor = window.tumRaporlar.find(r => r.id == id);
       if (!rapor) return;
 
       aktifRaporId = rapor.id;
       document.getElementById('btnKaydet').innerText = "🔄 Güncelle";
+
+      if (!rapor.foto_listesi) {
+        const { data, error } = await _supabase
+          .from('uretim_fotogaleri')
+          .select('foto_listesi')
+          .eq('id', id)
+          .single();
+        
+        if (!error && data) {
+          rapor.foto_listesi = data.foto_listesi;
+        }
+      }
 
       document.getElementById('musteriAdi').value = rapor.musteri_adi || '';
       document.getElementById('urunAdi').value = rapor.urun_adi || '';
@@ -781,8 +797,8 @@ async function kayitliRaporlariListele() {
       window.scrollTo({ top: document.getElementById('yazdirilacakAlan').offsetTop - 10, behavior: 'smooth' });
     }
 
-    function raporDetayGoster(id) {
-      raporDuzenle(id);
+    async function raporDetayGoster(id) {
+      await raporDuzenle(id);
       
       const detayIcerik = document.getElementById('yazdirilacakAlan').cloneNode(true);
       detayIcerik.querySelectorAll('.foto-sil-btn').forEach(el => el.remove());
