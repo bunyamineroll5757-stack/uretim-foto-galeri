@@ -667,13 +667,17 @@
       }
     }
 
-    async function kayitliRaporlariListele() {
+  async function kayitliRaporlariListele() {
       const alan = document.getElementById('raporListesiAlani');
       alan.innerHTML = '<div class="text-secondary small text-center">Yükleniyor...</div>';
 
       if (!_supabase) return;
 
-      const { data, error } = await _supabase.from('uretim_fotogaleri').select('*').order('id', { ascending: false });
+      // Sadece gerekli sütunları çekiyoruz, ağır olan foto_listesi veritabanını yormasın diye ilk aşamada çağrılmıyor
+      const { data, error } = await _supabase
+        .from('uretim_fotogaleri')
+        .select('id, musteri_adi, urun_adi, tarih, tarak_hiz, saatlik_kg, kalinlik, gram, renk, kesim_eni, sarim, cap, firin_isi, ham1, ham2, ham3, ham4, ham1_kod, ham2_kod, ham3_kod, ham4_kod, ilac1, ilac2, ilac3, ilac4, ilac1_kod, ilac2_kod, ilac3_kod, ilac4_kod, notlar, foto_listesi')
+        .order('id', { ascending: false });
       
       if (error) {
         console.error("Supabase Hata:", error);
