@@ -50,40 +50,18 @@
       position: relative;
     }
     
-    /* Üst Başlık ve Karekod Alanı */
-    .pdf-baslik-alani {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: linear-gradient(90deg, #1e293b 0%, #334155 100%);
-      padding: 8px 12px;
-      border-radius: 6px;
-      margin-bottom: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .pdf-baslik-metin { 
+    .pdf-baslik { 
+      text-align: center; 
       font-weight: 800; 
       color: #ffffff; 
+      background: linear-gradient(90deg, #1e293b 0%, #334155 100%);
+      padding: 10px; 
+      border-radius: 6px;
+      margin-bottom: 10px; 
       font-size: 16px; 
       letter-spacing: 1px;
       text-transform: uppercase; 
-      margin: 0;
-    }
-
-    .karekod-kutu {
-      background: #ffffff;
-      padding: 3px;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .karekod-kutu img {
-      width: 48px;
-      height: 48px;
-      display: block;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
     .table-responsive { overflow-x: visible !important; }
@@ -286,3 +264,634 @@
       </div>
     </div>
 
+    <div class="rapor-kutu" id="yazdirilacakAlan">
+      <div>
+        <div class="pdf-baslik">ÜRETİM RAPORU</div>
+
+        <div class="table-responsive">
+          <table class="table uretim-tablo">
+            <thead>
+              <tr>
+                <th style="width: 55%;">Müşteri Adı</th>
+                <th style="width: 45%;">Tarih</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text" id="musteriAdi" placeholder="Müşteri Adı"></td>
+                <td><input type="date" id="tarih"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table uretim-tablo">
+            <thead>
+              <tr>
+                <th style="width: 34%;">Ürün Adı</th>
+                <th style="width: 33%;">Gram</th>
+                <th style="width: 33%;">Renk</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text" id="urunAdi" placeholder="Ürün Adı"></td>
+                <td><input type="text" id="gram" placeholder="Gram"></td>
+                <td><input type="text" id="renk" placeholder="Renk"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table uretim-tablo">
+            <thead>
+              <tr>
+                <th style="width: 33.33%;">Tarak Hız</th>
+                <th style="width: 33.33%;">Saatlik Kg</th>
+                <th style="width: 33.33%;">Kalınlık</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text" id="tarakHiz" placeholder="Tarak hız..."></td>
+                <td><input type="text" id="saatlikKg" placeholder="Saatlik kg..."></td>
+                <td><input type="text" id="kalinlik" placeholder="Kalınlık..."></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table uretim-tablo">
+            <tbody>
+              <tr><td colspan="4" class="baslik-satiri">⚙️ KESİM DETAY</td></tr>
+              <tr>
+                <th style="width: 25%;"> KESİM ENİ</th>
+                <th style="width: 25%;"> SARIM</th>
+                <th style="width: 25%;"> ÇAP</th>
+                <th style="width: 25%;"> FIRIN ISI</th>
+              </tr>
+              <tr>
+                <td>
+                  <div class="suffix-container">
+                    <input type="text" id="kesimEni" class="suffix-input" placeholder="En...">
+                    <span class="suffix-text">CM</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="suffix-container">
+                    <input type="text" id="sarim" class="suffix-input" placeholder="Sarım...">
+                    <span class="suffix-text">MT</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="suffix-container">
+                    <input type="text" id="cap" class="suffix-input" placeholder="Çap...">
+                    <span class="suffix-text">CM</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="suffix-container">
+                    <input type="text" id="firinIsi" class="suffix-input" placeholder="Isı...">
+                    <span class="suffix-text">°C</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table uretim-tablo">
+            <tbody>
+              <tr><td colspan="4" class="baslik-satiri">🧪 HAMMADDE KARIŞIM ORANLARI (%)</td></tr>
+              <tr>
+                <th style="width: 25%;">BALKAN 1 </th>
+                <th style="width: 25%;">BALKAN 2 </th>
+                <th style="width: 25%;">BALKAN 3 </th>
+                <th style="width: 25%;">BALKAN 4 </th>
+              </tr>
+              <tr>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ham1" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ham2" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ham3" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ham4" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="text" id="ham1_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ham2_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ham3_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ham4_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+              </tr>
+
+              <tr><td colspan="4" class="baslik-satiri">🧫 İLAÇ KARIŞIM ORANLARI (%)</td></tr>
+              <tr>
+                <th style="width: 25%;">İLAÇ </th>
+                <th style="width: 25%;">İLAÇ </th>
+                <th style="width: 25%;">İLAÇ </th>
+                <th style="width: 25%;">SU </th>
+              </tr>
+              <tr>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ilac1" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ilac2" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ilac3" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
+                <td>
+                  <div class="prefix-container">
+                    <span class="prefix-text">%</span>
+                    <input type="text" id="ilac4" class="prefix-input" placeholder="0">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="text" id="ilac1_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ilac2_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ilac3_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+                <td><input type="text" id="ilac4_kod" style="color: #64748b !important; font-style: italic;" placeholder="Kod/Ad"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mb-1">
+          <label for="notlar" class="fw-bold text-dark small mb-1">📝 RAPOR NOTLARI / AÇIKLAMA:</label>
+          <textarea id="notlar" class="form-control notlar-alani" rows="2" placeholder="Üretim veya süreçle ilgili notlarınızı yazınız..."></textarea>
+        </div>
+      </div>
+
+      <div class="card border-2 border-dashed border-primary p-2 text-center mb-2 no-print bg-light" style="border-radius: 8px;">
+        <h6 class="fw-bold text-primary mb-1 small">📷 Fotoğraf Ekle (En fazla 25 Adet)</h6>
+        <input type="file" id="fotoYukleInput" multiple accept="image/*" class="d-none" onchange="fotograflariIsle(this)">
+        <div>
+          <label for="fotoYukleInput" class="btn btn-primary btn-sm px-3 py-1 fw-bold shadow-sm" style="background-color: var(--accent-color);">Fotoğraf Seç</label>
+          <span class="ms-2 fw-bold text-secondary small" id="fotoSayac">(0 / 25)</span>
+        </div>
+      </div>
+
+      <div id="fotoGaleriAlani" class="foto-liste"></div>
+    </div>
+  </div>
+
+  <!-- Detay Modalı -->
+  <div class="modal fade" id="detayModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title fw-bold">Rapor Detayı & İşlemler</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+        </div>
+        <div class="modal-body p-1" id="detayModalIcerik"></div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-secondary btn-sm fw-bold" data-bs-dismiss="modal">Kapat</button>
+          <div>
+            <button onclick="whatsappPaylas()" class="btn btn-success btn-sm me-1 fw-bold">💬 WhatsApp Paylaş</button>
+            <button onclick="pdfIndirVeKaydet()" class="btn btn-danger btn-sm fw-bold">📄 PDF İndir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fotoğraf Tam Ekran Modal -->
+  <div class="modal fade" id="tamEkranFotoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-fullscreen">
+      <div class="modal-content bg-black border-0">
+        <div class="modal-header border-0 position-absolute top-0 end-0 z-3 p-3">
+          <button type="button" class="btn-close btn-close-white bg-white p-2 rounded-circle shadow" data-bs-dismiss="modal" aria-label="Kapat"></button>
+        </div>
+        <div class="modal-body d-flex justify-content-center align-items-center p-0">
+          <img id="tamEkranFotoImg" src="" class="img-fluid" style="max-height: 100vh; max-width: 100vw; object-fit: contain;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase ve Bootstrap Kütüphaneleri -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const SABIT_KULLANICI = "bunyamin";
+    const SABIT_SIFRE = "Busra.5757";
+
+    const SUPABASE_URL = 'https://ihsetoxxggiaeulpqhzg.supabase.co';
+    const SUPABASE_KEY = "sb_publishable_HoqAcz7S0ANBNyQTj6fjew_YCa_71nb";
+    
+    const _supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+    document.getElementById('tarih').valueAsDate = new Date();
+    let tumFotoBase64Listesi = [];
+    let aktifRaporId = null;
+    window.tumRaporlar = [];
+
+    window.onload = function() { 
+      if (localStorage.getItem('uretim_oturum') === 'acik') {
+        document.getElementById('loginEkran').style.display = 'none';
+        document.getElementById('anaUygulama').style.display = 'block';
+        if (_supabase) kayitliRaporlariListele(); 
+      }
+    };
+
+    function girisYap(event) {
+      event.preventDefault();
+      const kAd = document.getElementById('loginKullanici').value;
+      const sifre = document.getElementById('loginSifre').value;
+
+      if (kAd === SABIT_KULLANICI && sifre === SABIT_SIFRE) {
+        localStorage.setItem('uretim_oturum', 'acik');
+        document.getElementById('loginEkran').style.display = 'none';
+        document.getElementById('anaUygulama').style.display = 'block';
+        document.getElementById('loginHata').classList.add('d-none');
+        if (_supabase) kayitliRaporlariListele();
+      } else {
+        document.getElementById('loginHata').classList.remove('d-none');
+      }
+    }
+
+    function cikisYap() {
+      localStorage.removeItem('uretim_oturum');
+      location.reload();
+    }
+
+    async function fotograflariIsle(input) {
+      const files = Array.from(input.files);
+      if (tumFotoBase64Listesi.length + files.length > 25) {
+        alert("En fazla 25 adet fotoğraf ekleyebilirsiniz!");
+        return;
+      }
+      for (let file of files) {
+        const base64Data = await fotoSikistirVeOku(file);
+        tumFotoBase64Listesi.push(base64Data);
+        galeriyiEkranaCiz(base64Data, tumFotoBase64Listesi.length - 1);
+      }
+      input.value = "";
+    }
+
+    function fotoSikistirVeOku(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            
+            const max_size = 1200;
+            if (width > height) {
+              if (width > max_size) { height *= max_size / width; width = max_size; }
+            } else {
+              if (height > max_size) { width *= max_size / height; height = max_size; }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+            resolve(compressedBase64);
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function galeriyiEkranaCiz(src, index) {
+      const alan = document.getElementById('fotoGaleriAlani');
+      document.getElementById('fotoSayac').innerText = `(${tumFotoBase64Listesi.length} / 25)`;
+
+      const div = document.createElement('div');
+      div.className = "foto-kart";
+      div.innerHTML = `
+        <button type="button" class="btn btn-sm btn-danger foto-sil-btn" onclick="fotoSil(${index})">❌ Sil</button>
+        <img src="${src}" onclick="fotografiTamEkranAc('${src}')" title="Büyütmek için tıklayın">
+      `;
+      alan.appendChild(div);
+    }
+
+    function fotografiTamEkranAc(src) {
+      document.getElementById('tamEkranFotoImg').src = src;
+      const tamEkranModal = new bootstrap.Modal(document.getElementById('tamEkranFotoModal'));
+      tamEkranModal.show();
+    }
+
+    function fotoSil(index) {
+      tumFotoBase64Listesi.splice(index, 1);
+      const alan = document.getElementById('fotoGaleriAlani');
+      alan.innerHTML = "";
+      tumFotoBase64Listesi.forEach((src, i) => galeriyiEkranaCiz(src, i));
+      document.getElementById('fotoSayac').innerText = `(${tumFotoBase64Listesi.length} / 25)`;
+    }
+
+    async function veriyiKaydet() {
+      if (!_supabase) {
+        alert("Supabase bağlantısı kurulamadı!");
+        return;
+      }
+
+      const btn = document.getElementById('btnKaydet');
+      btn.innerText = "⏳...";
+      btn.disabled = true;
+
+      const payload = {
+        musteri_adi: document.getElementById('musteriAdi').value,
+        urun_adi: document.getElementById('urunAdi').value,
+        tarih: document.getElementById('tarih').value,
+        tarak_hiz: document.getElementById('tarakHiz').value,
+        saatlik_kg: document.getElementById('saatlikKg').value,
+        kalinlik: document.getElementById('kalinlik').value,
+        gram: document.getElementById('gram').value,
+        renk: document.getElementById('renk').value,
+        kesim_eni: document.getElementById('kesimEni').value,
+        sarim: document.getElementById('sarim').value,
+        cap: document.getElementById('cap').value,
+        firin_isi: document.getElementById('firinIsi').value,
+        ham1: document.getElementById('ham1').value, ham2: document.getElementById('ham2').value,
+        ham3: document.getElementById('ham3').value, ham4: document.getElementById('ham4').value,
+        ham1_kod: document.getElementById('ham1_kod').value, ham2_kod: document.getElementById('ham2_kod').value,
+        ham3_kod: document.getElementById('ham3_kod').value, ham4_kod: document.getElementById('ham4_kod').value,
+        ilac1: document.getElementById('ilac1').value, ilac2: document.getElementById('ilac2').value,
+        ilac3: document.getElementById('ilac3').value, ilac4: document.getElementById('ilac4').value,
+        ilac1_kod: document.getElementById('ilac1_kod').value, ilac2_kod: document.getElementById('ilac2_kod').value,
+        ilac3_kod: document.getElementById('ilac3_kod').value, ilac4_kod: document.getElementById('ilac4_kod').value,
+        notlar: document.getElementById('notlar').value,
+        foto_listesi: tumFotoBase64Listesi
+      };
+
+      try {
+        if (aktifRaporId) {
+          const { error } = await _supabase.from('uretim_fotogaleri').update(payload).eq('id', aktifRaporId);
+          if (error) throw error;
+          alert("Rapor güncellendi!");
+        } else {
+          const { error } = await _supabase.from('uretim_fotogaleri').insert([payload]);
+          if (error) throw error;
+          alert("Yeni rapor kaydedildi!");
+        }
+        formuTemizle();
+        kayitliRaporlariListele();
+      } catch (err) {
+        alert("Kayıt Hatası: " + err.message);
+      } finally {
+        btn.innerText = "💾 Kaydet";
+        btn.disabled = false;
+      }
+    }
+
+async function kayitliRaporlariListele() {
+      const alan = document.getElementById('raporListesiAlani');
+      alan.innerHTML = '<div class="text-secondary small text-center">Yükleniyor...</div>';
+
+      if (!_supabase) return;
+
+      // Zaman aşımını önlemek için sadece son 20 kaydı ve fotoğraflar haricindeki alanları çekiyoruz
+      const { data, error } = await _supabase
+        .from('uretim_fotogaleri')
+        .select('id, musteri_adi, urun_adi, tarih, tarak_hiz, saatlik_kg, kalinlik, gram, renk, kesim_eni, sarim, cap, firin_isi, ham1, ham2, ham3, ham4, ham1_kod, ham2_kod, ham3_kod, ham4_kod, ilac1, ilac2, ilac3, ilac4, ilac1_kod, ilac2_kod, ilac3_kod, ilac4_kod, notlar')
+        .order('id', { ascending: false })
+        .limit(20);
+      
+      if (error) {
+        console.error("Supabase Hata:", error);
+        alan.innerHTML = `<div class="text-danger small text-center">Hata: ${error.message}</div>`;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        alan.innerHTML = '<div class="text-secondary small text-center">Kayıtlı rapor bulunmuyor.</div>';
+        return;
+      }
+
+      window.tumRaporlar = data;
+      listeyiEkranaBas(data);
+    }
+
+    function listeyiEkranaBas(dataListesi) {
+      const alan = document.getElementById('raporListesiAlani');
+      alan.innerHTML = "";
+
+      if (dataListesi.length === 0) {
+        alan.innerHTML = '<div class="text-secondary small text-center py-2">Eşleşen kayıt bulunamadı.</div>';
+        return;
+      }
+
+      dataListesi.forEach(item => {
+        const col = document.createElement('div');
+        col.className = 'col-12';
+        col.innerHTML = `
+          <div class="liste-kart d-flex justify-content-between align-items-center py-2 px-2 my-1">
+            <div>
+              <div class="fw-bold text-dark small">${item.musteri_adi ? item.musteri_adi + ' - ' : ''}${item.urun_adi || 'Başlıksız Ürün'}</div>
+              <div class="small text-muted" style="font-size:10px;">📅 ${item.tarih || '-'} ${item.tarak_hiz ? '| ⚡ ' + item.tarak_hiz : ''}</div>
+            </div>
+            <div>
+              <button onclick="raporDetayGoster(${item.id})" class="btn btn-sm btn-info text-white p-1 fw-bold" title="Detay Göster">👁️</button>
+              <button onclick="raporDuzenle(${item.id})" class="btn btn-sm btn-warning text-white p-1 fw-bold" title="Düzenle">✏️</button>
+              <button onclick="raporSil(${item.id})" class="btn btn-sm btn-danger p-1 fw-bold" title="Sil">🗑️</button>
+            </div>
+          </div>
+        `;
+        alan.appendChild(col);
+      });
+    }
+
+    function raporlariFiltrele(aramaMetni) {
+      const arama = aramaMetni.toLowerCase().trim();
+      if (!window.tumRaporlar) return;
+
+      const filtrelenmis = window.tumRaporlar.filter(item => {
+        const musteri = (item.musteri_adi || '').toLowerCase();
+        const urun = (item.urun_adi || '').toLowerCase();
+        return musteri.includes(arama) || urun.includes(arama);
+      });
+
+      listeyiEkranaBas(filtrelenmis);
+    }
+
+    async function raporDuzenle(id) {
+      let rapor = window.tumRaporlar.find(r => r.id == id);
+      if (!rapor) return;
+
+      aktifRaporId = rapor.id;
+      document.getElementById('btnKaydet').innerText = "🔄 Güncelle";
+
+      if (!rapor.foto_listesi) {
+        const { data, error } = await _supabase
+          .from('uretim_fotogaleri')
+          .select('foto_listesi')
+          .eq('id', id)
+          .single();
+        
+        if (!error && data) {
+          rapor.foto_listesi = data.foto_listesi;
+        }
+      }
+
+      document.getElementById('musteriAdi').value = rapor.musteri_adi || '';
+      document.getElementById('urunAdi').value = rapor.urun_adi || '';
+      document.getElementById('tarih').value = rapor.tarih || '';
+      document.getElementById('tarakHiz').value = rapor.tarak_hiz || '';
+      document.getElementById('saatlikKg').value = rapor.saatlik_kg || '';
+      document.getElementById('kalinlik').value = rapor.kalinlik || '';
+      document.getElementById('gram').value = rapor.gram || '';
+      document.getElementById('renk').value = rapor.renk || '';
+      
+      document.getElementById('kesimEni').value = rapor.kesim_eni || '';
+      document.getElementById('sarim').value = rapor.sarim || '';
+      document.getElementById('cap').value = rapor.cap || '';
+      document.getElementById('firinIsi').value = rapor.firin_isi || '';
+
+      document.getElementById('ham1').value = rapor.ham1 || '';
+      document.getElementById('ham2').value = rapor.ham2 || '';
+      document.getElementById('ham3').value = rapor.ham3 || '';
+      document.getElementById('ham4').value = rapor.ham4 || '';
+      document.getElementById('ham1_kod').value = rapor.ham1_kod || '';
+      document.getElementById('ham2_kod').value = rapor.ham2_kod || '';
+      document.getElementById('ham3_kod').value = rapor.ham3_kod || '';
+      document.getElementById('ham4_kod').value = rapor.ham4_kod || '';
+
+      document.getElementById('ilac1').value = rapor.ilac1 || '';
+      document.getElementById('ilac2').value = rapor.ilac2 || '';
+      document.getElementById('ilac3').value = rapor.ilac3 || '';
+      document.getElementById('ilac4').value = rapor.ilac4 || '';
+      document.getElementById('ilac1_kod').value = rapor.ilac1_kod || '';
+      document.getElementById('ilac2_kod').value = rapor.ilac2_kod || '';
+      document.getElementById('ilac3_kod').value = rapor.ilac3_kod || '';
+      document.getElementById('ilac4_kod').value = rapor.ilac4_kod || '';
+
+      document.getElementById('notlar').value = rapor.notlar || '';
+
+      document.getElementById('fotoGaleriAlani').innerHTML = "";
+      tumFotoBase64Listesi = Array.isArray(rapor.foto_listesi) ? rapor.foto_listesi : [];
+      tumFotoBase64Listesi.forEach((src, index) => galeriyiEkranaCiz(src, index));
+
+      window.scrollTo({ top: document.getElementById('yazdirilacakAlan').offsetTop - 10, behavior: 'smooth' });
+    }
+
+    async function raporDetayGoster(id) {
+      await raporDuzenle(id);
+      
+      const detayIcerik = document.getElementById('yazdirilacakAlan').cloneNode(true);
+      detayIcerik.querySelectorAll('.foto-sil-btn').forEach(el => el.remove());
+      
+      const modalBody = document.getElementById('detayModalIcerik');
+      modalBody.innerHTML = "";
+      modalBody.appendChild(detayIcerik);
+
+      const modal = new bootstrap.Modal(document.getElementById('detayModal'));
+      modal.show();
+    }
+
+    async function raporSil(id) {
+      if (!confirm("Bu raporu silmek istediğinize emin misiniz?")) return;
+      const { error } = await _supabase.from('uretim_fotogaleri').delete().eq('id', id);
+      if (error) {
+        alert("Silme hatası: " + error.message);
+      } else {
+        alert("Rapor silindi.");
+        kayitliRaporlariListele();
+      }
+    }
+
+    function formuTemizle() {
+      aktifRaporId = null;
+      document.getElementById('btnKaydet').innerText = "💾 Kaydet";
+      document.querySelectorAll('#yazdirilacakAlan input, #yazdirilacakAlan textarea').forEach(i => i.value = "");
+      document.getElementById('tarih').valueAsDate = new Date();
+      document.getElementById('fotoGaleriAlani').innerHTML = "";
+      tumFotoBase64Listesi = [];
+      document.getElementById('fotoSayac').innerText = "(0 / 25)";
+    }
+
+    function pdfIndirVeKaydet() {
+      const element = document.getElementById('yazdirilacakAlan');
+      const silButonlari = element.querySelectorAll('.foto-sil-btn');
+      silButonlari.forEach(b => b.style.display = 'none');
+
+      const opt = {
+        margin:       [5, 5, 5, 5],
+        filename:     'uretim_proses_raporu.pdf',
+        image:        { type: 'jpeg', quality: 0.92 },
+        html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().from(element).set(opt).save().then(() => {
+        silButonlari.forEach(b => b.style.display = 'block');
+      });
+    }
+
+    async function whatsappPaylas() {
+      const element = document.getElementById('yazdirilacakAlan');
+      const silButonlari = element.querySelectorAll('.foto-sil-btn');
+      silButonlari.forEach(b => b.style.display = 'none');
+
+      const opt = {
+        margin: [5, 5, 5, 5],
+        filename: 'uretim_proses_raporu.pdf',
+        image: { type: 'jpeg', quality: 0.92 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      try {
+        const pdfBlob = await html2pdf().from(element).set(opt).outputPdf('blob');
+        silButonlari.forEach(b => b.style.display = 'block');
+
+        const file = new File([pdfBlob], "uretim_proses_raporu.pdf", { type: "application/pdf" });
+        const musteri = document.getElementById('musteriAdi').value || '';
+        const urun = document.getElementById('urunAdi').value || '';
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'Üretim Proses Raporu',
+            text: `Üretim Raporu - Müşteri: ${musteri}, Ürün: ${urun}`
+          });
+        } else {
+          const url = URL.createObjectURL(pdfBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'uretim_proses_raporu.pdf';
+          a.click();
+          
+          const metin = `*ÜRETİM PROSES RAPORU* ⚙️\nMüşteri: ${musteri}\nÜrün: ${urun}`;
+          window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(metin)}`, '_blank');
+        }
+      } catch (err) {
+        silButonlari.forEach(b => b.style.display = 'block');
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
