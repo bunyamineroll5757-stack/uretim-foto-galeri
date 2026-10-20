@@ -292,7 +292,7 @@
         <div class="pdf-baslik-alani">
           <h5 class="pdf-baslik-metin">ÜRETİM RAPORU</h5>
           <div class="karekod-kutu" title="Rapor Karekodu">
-            <img id="raporKarekodImg" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=URETIM-RAPORU" alt="QR Kodu">
+            <img id="raporKarekodImg" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://bunyamineroll5757-stack.github.io/uretim-foto-galeri/index.html" alt="QR Kodu">
           </div>
         </div>
 
@@ -538,34 +538,49 @@
     let aktifRaporId = null;
     window.tumRaporlar = [];
 
-    // Karekod Güncelleme Fonksiyonu
+    // Karekod Güncelleme Fonksiyonu (Web Linki İçerir)
     function karekodGuncelle(id = null) {
-      const musteriElem = document.getElementById('musteriAdi');
-      const urunElem = document.getElementById('urunAdi');
-      const tarihElem = document.getElementById('tarih');
       const imgElem = document.getElementById('raporKarekodImg');
-
       if (!imgElem) return;
 
-      const musteri = musteriElem ? (musteriElem.value || 'Musteri') : 'Musteri';
-      const urun = urunElem ? (urunElem.value || 'Urun') : 'Urun';
-      const tarih = tarihElem ? (tarihElem.value || '') : '';
+      const hedefId = id || aktifRaporId;
+      let url = 'https://bunyamineroll5757-stack.github.io/uretim-foto-galeri/index.html';
       
-      const qrMetin = `RAPOR ID: ${id || aktifRaporId || 'YENI'}\nMUSTERI: ${musteri}\nURUN: ${urun}\nTARIH: ${tarih}`;
-      const encodedText = encodeURIComponent(qrMetin);
+      if (hedefId) {
+        url += `?rapor_id=${hedefId}`;
+      }
       
-      imgElem.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedText}`;
+      imgElem.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}`;
     }
 
-    window.onload = function() { 
+    window.onload = async function() { 
       const tarihInput = document.getElementById('tarih');
       if (tarihInput) tarihInput.valueAsDate = new Date();
+
+      // URL'de rapor_id parametresi var mı kontrol edelim (Karekodla açıldıysa)
+      const urlParams = new URLSearchParams(window.location.search);
+      const gelenRaporId = urlParams.get('rapor_id');
 
       if (localStorage.getItem('uretim_oturum') === 'acik') {
         document.getElementById('loginEkran').style.display = 'none';
         document.getElementById('anaUygulama').style.display = 'block';
         karekodGuncelle();
-        if (_supabase) kayitliRaporlariListele(); 
+        if (_supabase) {
+          await kayitliRaporlariListele();
+          if (gelenRaporId) {
+            raporDetayGoster(gelenRaporId);
+          }
+        }
+      } else if (gelenRaporId) {
+        // Oturum açık değilse ama karekodla direkt rapora tıklandıysa otomatik giriş yapıp detayı açalım
+        localStorage.setItem('uretim_oturum', 'acik');
+        document.getElementById('loginEkran').style.display = 'none';
+        document.getElementById('anaUygulama').style.display = 'block';
+        karekodGuncelle();
+        if (_supabase) {
+          await kayitliRaporlariListele();
+          raporDetayGoster(gelenRaporId);
+        }
       }
     };
 
@@ -704,11 +719,14 @@
           if (error) throw error;
           alert("Rapor güncellendi!");
         } else {
-          const { error } = await _supabase.from('uretim_fotogaleri').insert([payload]);
+          const { data: yeniKayit, error } = await _supabase.from('uretim_fotogaleri').insert([payload]).select();
           if (error) throw error;
+          if (yeniKayit && yeniKayit.length > 0) {
+            aktifRaporId = yeniKayit[0].id;
+            karekodGuncelle(aktifRaporId);
+          }
           alert("Yeni rapor kaydedildi!");
         }
-        formuTemizle();
         kayitliRaporlariListele();
       } catch (err) {
         alert("Kayıt Hatası: " + err.message);
@@ -789,7 +807,17 @@
 
     async function raporDuzenle(id) {
       let rapor = window.tumRaporlar.find(r => r.id == id);
-      if (!rapor) return;
+      
+      // Eğer rapor anlık listede yoksa (örneğin direkt karekod linkiyle girildiyse) Supabase'den çekelim
+      if (!rapor) {
+        const { data, error } = await _supabase
+          .from('uretim_fotogaleri')
+          .select('*')
+          .eq('id', id)
+          .single();
+        if (error || !data) return;
+        rapor = data;
+      }
 
       aktifRaporId = rapor.id;
       document.getElementById('btnKaydet').innerText = "🔄 Güncelle";
