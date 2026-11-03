@@ -50,40 +50,18 @@
       position: relative;
     }
     
-    /* Üst Başlık ve Karekod Alanı */
-    .pdf-baslik-alani {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: linear-gradient(90deg, #1e293b 0%, #334155 100%);
-      padding: 8px 12px;
-      border-radius: 6px;
-      margin-bottom: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .pdf-baslik-metin { 
+    .pdf-baslik { 
+      text-align: center; 
       font-weight: 800; 
       color: #ffffff; 
+      background: linear-gradient(90deg, #1e293b 0%, #334155 100%);
+      padding: 10px; 
+      border-radius: 6px;
+      margin-bottom: 10px; 
       font-size: 16px; 
       letter-spacing: 1px;
       text-transform: uppercase; 
-      margin: 0;
-    }
-
-    .karekod-kutu {
-      background: #ffffff;
-      padding: 3px;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .karekod-kutu img {
-      width: 48px;
-      height: 48px;
-      display: block;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
     .table-responsive { overflow-x: visible !important; }
@@ -288,13 +266,7 @@
 
     <div class="rapor-kutu" id="yazdirilacakAlan">
       <div>
-        <!-- Başlık ve Karekod Alanı -->
-        <div class="pdf-baslik-alani">
-          <h5 class="pdf-baslik-metin">ÜRETİM RAPORU</h5>
-          <div class="karekod-kutu" title="Rapor Karekodu">
-            <img id="raporKarekodImg" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://bunyamineroll5757-stack.github.io/uretim-foto-galeri/index.html" alt="QR Kodu">
-          </div>
-        </div>
+        <div class="pdf-baslik">ÜRETİM RAPORU</div>
 
         <div class="table-responsive">
           <table class="table uretim-tablo">
@@ -306,8 +278,8 @@
             </thead>
             <tbody>
               <tr>
-                <td><input type="text" id="musteriAdi" placeholder="Müşteri Adı" oninput="karekodGuncelle()"></td>
-                <td><input type="date" id="tarih" onchange="karekodGuncelle()"></td>
+                <td><input type="text" id="musteriAdi" placeholder="Müşteri Adı"></td>
+                <td><input type="date" id="tarih"></td>
               </tr>
             </tbody>
           </table>
@@ -322,7 +294,7 @@
             </thead>
             <tbody>
               <tr>
-                <td><input type="text" id="urunAdi" placeholder="Ürün Adı" oninput="karekodGuncelle()"></td>
+                <td><input type="text" id="urunAdi" placeholder="Ürün Adı"></td>
                 <td><input type="text" id="gram" placeholder="Gram"></td>
                 <td><input type="text" id="renk" placeholder="Renk"></td>
               </tr>
@@ -534,53 +506,16 @@
     
     const _supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
+    document.getElementById('tarih').valueAsDate = new Date();
     let tumFotoBase64Listesi = [];
     let aktifRaporId = null;
     window.tumRaporlar = [];
 
-    // Karekod Güncelleme Fonksiyonu (Web Linki İçerir)
-    function karekodGuncelle(id = null) {
-      const imgElem = document.getElementById('raporKarekodImg');
-      if (!imgElem) return;
-
-      const hedefId = id || aktifRaporId;
-      let url = 'https://bunyamineroll5757-stack.github.io/uretim-foto-galeri/index.html';
-      
-      if (hedefId) {
-        url += `?rapor_id=${hedefId}`;
-      }
-      
-      imgElem.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}`;
-    }
-
-    window.onload = async function() { 
-      const tarihInput = document.getElementById('tarih');
-      if (tarihInput) tarihInput.valueAsDate = new Date();
-
-      // URL'de rapor_id parametresi var mı kontrol edelim (Karekodla açıldıysa)
-      const urlParams = new URLSearchParams(window.location.search);
-      const gelenRaporId = urlParams.get('rapor_id');
-
+    window.onload = function() { 
       if (localStorage.getItem('uretim_oturum') === 'acik') {
         document.getElementById('loginEkran').style.display = 'none';
         document.getElementById('anaUygulama').style.display = 'block';
-        karekodGuncelle();
-        if (_supabase) {
-          await kayitliRaporlariListele();
-          if (gelenRaporId) {
-            raporDetayGoster(gelenRaporId);
-          }
-        }
-      } else if (gelenRaporId) {
-        // Oturum açık değilse ama karekodla direkt rapora tıklandıysa otomatik giriş yapıp detayı açalım
-        localStorage.setItem('uretim_oturum', 'acik');
-        document.getElementById('loginEkran').style.display = 'none';
-        document.getElementById('anaUygulama').style.display = 'block';
-        karekodGuncelle();
-        if (_supabase) {
-          await kayitliRaporlariListele();
-          raporDetayGoster(gelenRaporId);
-        }
+        if (_supabase) kayitliRaporlariListele(); 
       }
     };
 
@@ -594,7 +529,6 @@
         document.getElementById('loginEkran').style.display = 'none';
         document.getElementById('anaUygulama').style.display = 'block';
         document.getElementById('loginHata').classList.add('d-none');
-        karekodGuncelle();
         if (_supabase) kayitliRaporlariListele();
       } else {
         document.getElementById('loginHata').classList.remove('d-none');
@@ -719,14 +653,11 @@
           if (error) throw error;
           alert("Rapor güncellendi!");
         } else {
-          const { data: yeniKayit, error } = await _supabase.from('uretim_fotogaleri').insert([payload]).select();
+          const { error } = await _supabase.from('uretim_fotogaleri').insert([payload]);
           if (error) throw error;
-          if (yeniKayit && yeniKayit.length > 0) {
-            aktifRaporId = yeniKayit[0].id;
-            karekodGuncelle(aktifRaporId);
-          }
           alert("Yeni rapor kaydedildi!");
         }
+        formuTemizle();
         kayitliRaporlariListele();
       } catch (err) {
         alert("Kayıt Hatası: " + err.message);
@@ -736,12 +667,13 @@
       }
     }
 
-    async function kayitliRaporlariListele() {
+async function kayitliRaporlariListele() {
       const alan = document.getElementById('raporListesiAlani');
       alan.innerHTML = '<div class="text-secondary small text-center">Yükleniyor...</div>';
 
       if (!_supabase) return;
 
+      // Zaman aşımını önlemek için sadece son 20 kaydı ve fotoğraflar haricindeki alanları çekiyoruz
       const { data, error } = await _supabase
         .from('uretim_fotogaleri')
         .select('id, musteri_adi, urun_adi, tarih, tarak_hiz, saatlik_kg, kalinlik, gram, renk, kesim_eni, sarim, cap, firin_isi, ham1, ham2, ham3, ham4, ham1_kod, ham2_kod, ham3_kod, ham4_kod, ilac1, ilac2, ilac3, ilac4, ilac1_kod, ilac2_kod, ilac3_kod, ilac4_kod, notlar')
@@ -807,17 +739,7 @@
 
     async function raporDuzenle(id) {
       let rapor = window.tumRaporlar.find(r => r.id == id);
-      
-      // Eğer rapor anlık listede yoksa (örneğin direkt karekod linkiyle girildiyse) Supabase'den çekelim
-      if (!rapor) {
-        const { data, error } = await _supabase
-          .from('uretim_fotogaleri')
-          .select('*')
-          .eq('id', id)
-          .single();
-        if (error || !data) return;
-        rapor = data;
-      }
+      if (!rapor) return;
 
       aktifRaporId = rapor.id;
       document.getElementById('btnKaydet').innerText = "🔄 Güncelle";
@@ -872,8 +794,6 @@
       tumFotoBase64Listesi = Array.isArray(rapor.foto_listesi) ? rapor.foto_listesi : [];
       tumFotoBase64Listesi.forEach((src, index) => galeriyiEkranaCiz(src, index));
 
-      karekodGuncelle(rapor.id);
-
       window.scrollTo({ top: document.getElementById('yazdirilacakAlan').offsetTop - 10, behavior: 'smooth' });
     }
 
@@ -898,7 +818,6 @@
         alert("Silme hatası: " + error.message);
       } else {
         alert("Rapor silindi.");
-        formuTemizle();
         kayitliRaporlariListele();
       }
     }
@@ -911,7 +830,6 @@
       document.getElementById('fotoGaleriAlani').innerHTML = "";
       tumFotoBase64Listesi = [];
       document.getElementById('fotoSayac').innerText = "(0 / 25)";
-      karekodGuncelle();
     }
 
     function pdfIndirVeKaydet() {
